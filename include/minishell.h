@@ -2,6 +2,6 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-# include "../libraries/libft/libft.h"
+# include "../lib/libft/libft.h"
 
 #endif

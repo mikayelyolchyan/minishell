@@ -3,16 +3,19 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address -fsanitize=undefined
 
-SOURCES_DIR = sources/
-PARSER_DIR = sources/parser/
-EXECUTOR_DIR = sources/executor/
-BUILTINS_DIR = sources/builtins/
-ENV_DIR = sources/env/
-UTILS_DIR = sources/utils/
-SIGNALS_DIR = sources/signals/
-HEADERS_DIR = includes/
-LIBFT_DIR = libraries/libft/
+SOURCES_DIR = src/
+PARSER_DIR = src/parser/
+EXECUTOR_DIR = src/executor/
+BUILTINS_DIR = src/builtins/
+ENV_DIR = src/env/
+UTILS_DIR = src/utils/
+SIGNALS_DIR = src/signals/
+HEADERS_DIR = include/
+LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
+
+BIN_DIR = bin
+BUILD_DIR = build
 
 SRCS = \
     $(SOURCES_DIR)main.c
@@ -36,16 +39,16 @@ HDRS = \
     #$(HEADERS_DIR)signals/signals.h \
     #$(HEADERS_DIR)utils/str_utils.h
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:src/%.c=build/%.o)
 
 INCLUDES = -I$(HEADERS_DIR) -I$(LIBFT_DIR) -I$(HEADERS_DIR)parser -I$(HEADERS_DIR)executor -I$(HEADERS_DIR)builtins -I$(HEADERS_DIR)env -I$(HEADERS_DIR)signals -I$(HEADERS_DIR)utils
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(BIN_DIR)/$(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) -o $(NAME)
+$(BIN_DIR)/$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) -o $@
 
-%.o: %.c $(HDRS)
+build/%.o: src/%.c $(HDRS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
@@ -56,7 +59,7 @@ clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(BIN_DIR)/$(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
