@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/15 18:07:07 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/15 21:24:08 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,3 +30,27 @@
 	- Должен корректно работать как в интерактивном,
 		так и неинтерактивном режимах.
 */
+
+#include "../../include/prompt/prompt.h"
+#include "../../lib/libft/libft.h"
+
+void	get_prompt_line(void)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (!line)
+			break ;
+		if (line[0] != '\0')
+			add_history(line);
+		if (ft_strncmp(line, "exit", 4) == 0)
+		{
+			free(line);
+			break ;
+		}
+		printf("You entered: %s\n", line);
+		free(line);
+	}
+}
