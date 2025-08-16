@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 21:51:33 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/16 23:54:10 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	get_prompt_line(void)
 			*/
 		}
 		//printf("You entered: %s\n", line);
-		ft_lstclear(&tokens, free);
+		ft_lstclear(&tokens, del_token);
 		free(line);
 	}
 }

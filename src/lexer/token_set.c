@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 21:43:08 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 21:54:57 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/16 23:51:46 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	set_redirection(t_token *new_token, const char *line, size_t *index)
 		new_token->redir_type = REDIR_HEREDOC;
 	else if (line[*index] == '<')
 		new_token->redir_type = REDIR_IN;
-	
 	if (new_token->redir_type == REDIR_APPEND || \
 		new_token->redir_type == REDIR_HEREDOC)
 		*index += 2;

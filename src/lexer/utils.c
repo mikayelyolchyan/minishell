@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 17:58:15 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 18:51:31 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/17 00:13:43 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,16 @@
 
 bool	is_space(int c)
 {
-	if (c == '\f' || c == '\n' || c == '\r' || c == '\t' || \
-		c == '\v' || c == ' ')
-	{
-		return (true);
-	}
-	return (false);
+	return (c == '\f' || c == '\n' || c == '\r' || \
+			c == '\t' || c == '\v' || c == ' ');
+}
+
+bool	is_operator(int c)
+{
+	return (c == '|' || c == '&' || c == '(' || c == ')' || c == ';');
+}
+
+bool	is_redirection(int c)
+{
+	return (c == '>' || c == '<');
 }

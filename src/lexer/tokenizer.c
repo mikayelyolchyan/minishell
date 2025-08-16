@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:13 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 22:10:21 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/17 00:27:42 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,22 @@ t_list *tokenize(const char *line)
 	t_list		*current;
 	t_token		*new_token;
 
-	index = 0;
-	head = NULL;
-	new_token = NULL;
 	if (!line)
 		return (NULL);
+	head = NULL;
+	index = 0;
 	while (line[index])
 	{
-		new_token = calloc(1, sizeof(t_token));
-		if (new_token == NULL)
-			return (ft_lstclear(&head, free), NULL);
 		while (is_space(line[index]) == true)
 			index++;
 		if (line[index] == '\0')
-		{
-			free(new_token);
 			break ;
-		}
-		if (line[index] == '|' || line[index] == '&' || line[index] == '(' || \
-			line[index] == ')')
+		new_token = calloc(1, sizeof(t_token));
+		if (new_token == NULL)
+			return (ft_lstclear(&head, del_token), NULL);
+		if (is_operator(line[index]) == true)
 			set_operator(new_token, line, &index);
-		else if (line[index] == '>' || line[index] == '<')
+		else if (is_redirection(line[index]) == true)
 			set_redirection(new_token, line, &index);
 		else
 		{

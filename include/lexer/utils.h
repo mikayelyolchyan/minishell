@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 17:57:19 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 17:59:12 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/17 00:05:20 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,7 @@
 #include <stdbool.h>
 
 bool	is_space(int c);
+bool	is_operator(int c);
+bool	is_redirection(int c);
 
 #endif
