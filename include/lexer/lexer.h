@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:04 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 21:45:03 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/16 22:11:04 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_token
 
 t_list		*tokenize(const char *line);
 
-t_token		*token_alloc_init(t_token_type type, const char *val);
+void		del_token(void *content);
 
 void		set_operator(t_token *new_token, const char *line, size_t *index);
 void		set_redirection(t_token *new_token, const char *line, \
