@@ -53,7 +53,10 @@ INCLUDES = -I$(HEADERS_DIR) \
 			-I$(HEADERS_DIR)signals \
 			-I$(HEADERS_DIR)utils
 
-all: $(LIBFT) $(BIN_DIR)/$(NAME)
+all: $(BIN_DIR) $(BUILD_DIR) $(LIBFT) $(BIN_DIR)/$(NAME)
+
+$(BIN_DIR) $(BUILD_DIR):
+	mkdir -p $@
 
 $(BIN_DIR)/$(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(INCLUDES) -lreadline $(OBJS) $(LIBFT) -o $@

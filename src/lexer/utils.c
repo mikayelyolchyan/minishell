@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/15 18:01:20 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 15:27:03 by miyolchy         ###   ########.fr       */
+/*   Created: 2025/08/16 17:58:15 by miyolchy          #+#    #+#             */
+/*   Updated: 2025/08/16 18:51:31 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../../include/lexer/utils.h"
 
-# include <stdio.h>
-
-#endif
+bool	is_space(int c)
+{
+	if (c == '\f' || c == '\n' || c == '\r' || c == '\t' || \
+		c == '\v' || c == ' ')
+	{
+		return (true);
+	}
+	return (false);
+}

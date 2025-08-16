@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/15 21:24:08 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:51:33 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@
 */
 
 #include "../../include/prompt/prompt.h"
-#include "../../lib/libft/libft.h"
+#include "../../include/lexer/lexer.h"
 
 void	get_prompt_line(void)
 {
-	char	*line;
+	char		*line;
+	t_list		*tokens;
 
 	while (1)
 	{
@@ -45,12 +46,29 @@ void	get_prompt_line(void)
 			break ;
 		if (line[0] != '\0')
 			add_history(line);
-		if (ft_strncmp(line, "exit", 4) == 0)
+		tokens = tokenize(line);
+		if (tokens == NULL)
 		{
-			free(line);
-			break ;
+			// todo handle tokenizer errors
 		}
-		printf("You entered: %s\n", line);
+		else
+		{
+			print_tokens(tokens);
+			/*
+				Give a list of tokens to parser for creating 
+							Abstract Syntax Tree
+				
+				example:
+				t_ast ast = parse_tokens(tokens);
+				if (ast)
+				{
+					execute_ast(ast);
+					free_ast(ast);
+				}
+			*/
+		}
+		//printf("You entered: %s\n", line);
+		ft_lstclear(&tokens, free);
 		free(line);
 	}
 }

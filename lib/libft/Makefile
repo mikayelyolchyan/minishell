@@ -6,19 +6,19 @@
 #    By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 18:06:16 by miyolchy          #+#    #+#              #
-#    Updated: 2025/08/13 18:24:17 by miyolchy         ###   ########.fr        #
+#    Updated: 2025/08/16 16:19:37 by miyolchy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 CC = cc
-
 CFLAGS = -Wall -Wextra -Werror
 
 AR = ar
-
 ARFLAGS = -rcs
+
+BUILD_DIR = build
 
 SRCS =  ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strlen.c ft_memset.c \
 		ft_bzero.c ft_memcpy.c ft_memmove.c ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c \
@@ -27,18 +27,20 @@ SRCS =  ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strl
 		ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c
 
 BSRCS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c \
-		ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c  ft_lstiter_bonus.c \
+		ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c \
 		ft_lstmap_bonus.c
 
-OBJS = $(SRCS:%.c=%.o)
-
-BOBJS = $(BSRCS:%.c=%.o)
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
+BOBJS = $(BSRCS:%.c=$(BUILD_DIR)/%.o)
 
 RM = rm -f
 
-all: $(NAME)
+all: $(BUILD_DIR) $(NAME)
 
-%.o: %.c libft.h
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+$(BUILD_DIR)/%.o: %.c libft.h | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)

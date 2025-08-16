@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:13 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/15 18:08:33 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/16 22:02:44 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,48 @@
 	- Должен корректно обрабатывать все допустимые символы и конструкции,
 		поддерживаемые minishell.
 */
+
+#include "../../include/lexer/lexer.h"
+#include "../../include/lexer/utils.h"
+#include <stddef.h>
+
+t_list *tokenize(const char *line)
+{
+	size_t		index;
+	t_list		*head;
+	t_list		*current;
+	t_token		*new_token;
+
+	index = 0;
+	head = NULL;
+	new_token = NULL;
+	if (!line)
+		return (NULL);
+	while (line[index])
+	{
+		new_token = calloc(1, sizeof(t_token));
+		if (new_token == NULL)
+			return (ft_lstclear(&head, free), NULL);
+		while (is_space(line[index]) == true)
+			index++;
+		if (line[index] == '\0')
+		{
+			free(new_token);
+			break ;
+		}
+		if (line[index] == '|' || line[index] == '&' || line[index] == '(' || \
+			line[index] == ')')
+			set_operator(new_token, line, &index);
+		else if (line[index] == '>' || line[index] == '<')
+			set_redirection(new_token, line, &index);
+		else
+		{
+			/* TODO: Quotes and word */
+		}
+		current = ft_lstnew(new_token);
+		if (current == NULL)
+			return (ft_lstclear(&head, free), free(new_token), NULL);
+		ft_lstadd_back(&head, current);
+	}
+	return (head);
+}

@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/15 18:01:20 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 15:27:03 by miyolchy         ###   ########.fr       */
+/*   Created: 2025/08/16 17:57:19 by miyolchy          #+#    #+#             */
+/*   Updated: 2025/08/16 17:59:12 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef UTILS_H
+# define UTILS_H
 
-# include <stdio.h>
+#include <stdbool.h>
+
+bool	is_space(int c);
 
 #endif

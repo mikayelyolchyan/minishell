@@ -6,12 +6,13 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:43 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/15 19:12:14 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/16 17:27:17 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+//#include "minishell.h"
 #include "../include/prompt/prompt.h"
+#include "../lib/libft/libft.h"
 
 int	main(int argc, char **argv, char **envp)
 {
