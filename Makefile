@@ -1,16 +1,11 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address -fsanitize=undefined
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address -fsanitize=undefined
 
 SOURCES_DIR = src/
+LEXER_DIR = src/lexer/
 PROMPT_DIR = src/prompt/
-PARSER_DIR = src/parser/
-EXECUTOR_DIR = src/executor/
-BUILTINS_DIR = src/builtins/
-ENV_DIR = src/env/
-UTILS_DIR = src/utils/
-SIGNALS_DIR = src/signals/
 HEADERS_DIR = include/
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
@@ -18,40 +13,36 @@ LIBFT = $(LIBFT_DIR)libft.a
 BIN_DIR = bin
 BUILD_DIR = build
 
+# Основные исходники (для minishell)
 SRCS = \
-	$(SOURCES_DIR)main.c \
-	$(PROMPT_DIR)prompt.c \
-	#$(PARSER_DIR)parser.c \
-	#$(EXECUTOR_DIR)executor.c \
-	#$(EXECUTOR_DIR)pipeline.c \
-	#$(BUILTINS_DIR)cd.c \
-	#$(BUILTINS_DIR)echo.c \
-	#$(ENV_DIR)env.c \
-	#$(ENV_DIR)export.c \
-	#$(UTILS_DIR)str_utils.c \
-	#$(PARSER_DIR)tokenizer.c \
-	#$(SIGNALS_DIR)signals.c
+    src/main.c \
+    $(PROMPT_DIR)prompt.c \
+    $(LEXER_DIR)tokenizer.c \
+    $(LEXER_DIR)token_set.c \
+    $(LEXER_DIR)token_free.c \
+    $(LEXER_DIR)utils.c \
+    tests/lexer/print_tokens.c \
+
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
+
+# Тестовые исходники (своё main)
+TEST_SRCS = \
+    tests/lexer/lexer.c \
+    $(LEXER_DIR)tokenizer.c \
+    $(LEXER_DIR)token_set.c \
+    $(LEXER_DIR)token_free.c \
+    $(LEXER_DIR)utils.c \
+    tests/lexer/print_tokens.c \
+
+TEST_OBJS = $(TEST_SRCS:%.c=$(BUILD_DIR)/%.o)
 
 HDRS = \
-	$(HEADERS_DIR)minishell.h \
-	#$(HEADERS_DIR)parser/parser.h \
-	#$(HEADERS_DIR)executor/executor.h \
-	#$(HEADERS_DIR)builtins/cd.h \
-	#$(HEADERS_DIR)env/env.h \
-	#$(HEADERS_DIR)signals/signals.h \
-	#$(HEADERS_DIR)utils/str_utils.h
+    $(HEADERS_DIR)minishell.h \
+    $(HEADERS_DIR)lexer/lexer.h \
+    $(HEADERS_DIR)lexer/utils.h \
+    $(HEADERS_DIR)prompt/prompt.h
 
-OBJS = $(SRCS:src/%.c=build/%.o)
-
-INCLUDES = -I$(HEADERS_DIR) \
-			-I$(LIBFT_DIR) \
-			-I$(HEADERS_DIR)prompt \
-			-I$(HEADERS_DIR)parser \
-			-I$(HEADERS_DIR)executor \
-			-I$(HEADERS_DIR)builtins \
-			-I$(HEADERS_DIR)env \
-			-I$(HEADERS_DIR)signals \
-			-I$(HEADERS_DIR)utils
+INCLUDES = -I$(HEADERS_DIR) -I$(LIBFT_DIR)
 
 all: $(BIN_DIR) $(BUILD_DIR) $(LIBFT) $(BIN_DIR)/$(NAME)
 
@@ -59,9 +50,10 @@ $(BIN_DIR) $(BUILD_DIR):
 	mkdir -p $@
 
 $(BIN_DIR)/$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) -lreadline $(OBJS) $(LIBFT) -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) -lreadline -lhistory -o $@
 
-$(BUILD_DIR)/%.o: src/%.c $(HDRS)
+# Компиляция всех .c в build/
+$(BUILD_DIR)/%.o: %.c $(HDRS)
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
@@ -69,13 +61,17 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR) all bonus
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(TEST_OBJS)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(BIN_DIR)/$(NAME)
+	rm -f $(BIN_DIR)/$(NAME) $(BIN_DIR)/lexer_test
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+# Собираем тест без src/main.c
+lexer_test: $(BIN_DIR) $(BUILD_DIR) $(LIBFT) $(TEST_OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(TEST_OBJS) $(LIBFT) -lreadline -o $(BIN_DIR)/lexer_test
+
+.PHONY: all clean fclean re lexer_test

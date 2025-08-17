@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:04 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 22:11:04 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:43:46 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEXER_H
 
 #include "../../lib/libft/libft.h"
+#include <stdbool.h>
 
 typedef enum e_token_type
 {
@@ -40,15 +41,15 @@ typedef enum e_redirection_type
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
-	REDIR_HEREDOC
+	REDIR_HERE_DOC
 }	t_redirection_type;
 
-typedef enum e_quote_type
-{
-    QUOTE_NONE,
-    QUOTE_SINGLE,
-    QUOTE_DOUBLE
-}	t_quote_type;
+//typedef enum e_quote_type // set quotes doing expander
+//{
+//    QUOTE_NONE,
+//    QUOTE_SINGLE,
+//    QUOTE_DOUBLE
+//}	t_quote_type;
 
 typedef struct s_token
 {
@@ -56,7 +57,7 @@ typedef struct s_token
 	char					*value;
 	t_operator_type			op_type;
 	t_redirection_type		redir_type;
-	t_quote_type			quote_type;
+	//t_quote_type			quote_type;
 }	t_token;
 
 t_list		*tokenize(const char *line);
@@ -66,5 +67,6 @@ void		del_token(void *content);
 void		set_operator(t_token *new_token, const char *line, size_t *index);
 void		set_redirection(t_token *new_token, const char *line, \
 							size_t *index);
+bool		set_word(t_token *new_token, const char *line, size_t *index);
 
 #endif

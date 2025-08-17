@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:13 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/17 00:27:42 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:35:23 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_list *tokenize(const char *line)
 			index++;
 		if (line[index] == '\0')
 			break ;
-		new_token = calloc(1, sizeof(t_token));
+		new_token = ft_calloc(1, sizeof(t_token));
 		if (new_token == NULL)
 			return (ft_lstclear(&head, del_token), NULL);
 		if (is_operator(line[index]) == true)
@@ -57,7 +57,9 @@ t_list *tokenize(const char *line)
 			set_redirection(new_token, line, &index);
 		else
 		{
-			/* TODO: Quotes and word */
+			if (set_word(new_token, line, &index) == false)
+				return (del_token(new_token), \
+					ft_lstclear(&head, del_token), NULL);
 		}
 		current = ft_lstnew(new_token);
 		if (current == NULL)
