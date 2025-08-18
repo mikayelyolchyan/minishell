@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:04 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/17 19:43:46 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/18 22:05:50 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ typedef enum e_redirection_type
 	REDIR_HERE_DOC
 }	t_redirection_type;
 
-//typedef enum e_quote_type // set quotes doing expander
-//{
-//    QUOTE_NONE,
-//    QUOTE_SINGLE,
-//    QUOTE_DOUBLE
-//}	t_quote_type;
+typedef enum e_quote_type // set quotes doing expander
+{
+    QUOTE_NONE,
+    QUOTE_SINGLE,
+    QUOTE_DOUBLE
+}	t_quote_type;
 
 typedef struct s_token
 {
@@ -57,7 +57,8 @@ typedef struct s_token
 	char					*value;
 	t_operator_type			op_type;
 	t_redirection_type		redir_type;
-	//t_quote_type			quote_type;
+	t_quote_type			quote_type;
+	
 }	t_token;
 
 t_list		*tokenize(const char *line);

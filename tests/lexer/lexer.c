@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 17:03:42 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/17 19:11:29 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/18 21:46:32 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,55 @@ static void	run_test(const char *input)
 
 int	main(void)
 {
+	// 🔹 Простые команды
 	run_test("echo hello");
+	run_test("ls -l /tmp");
+
+	// 🔹 Операторы
 	run_test("cmd1 | cmd2");
 	run_test("cmd1 && cmd2 || cmd3");
-	run_test(" ( sub ) & ; ");
-	run_test(">file >>append <in <<heredoc");
-	run_test("'single quote'");
-	run_test("\"double $quote\"");
-	run_test("mixed'\"nested\"'");
-	run_test("escaped\\ space \\\"escaped\\\"");
-	run_test("hello$world '$noexpand' \"$expand\"");
+	run_test("(subshell)");
+	run_test("(nested (subshell))");
+	run_test("cmd1 ; cmd2 & cmd3");
+
+	// 🔹 Редиректы
+	run_test(">file");
+	run_test(">>append");
+	run_test("<input");
+	run_test("<<heredoc");
+	run_test("cmd > out < in");
+
+	// 🔹 Кавычки
+	run_test("'single quoted string'");
+	run_test("\"double quoted string\"");
+	run_test("\"mix'ed inside double\"");
+	run_test("'mix\"ed inside single'");
+	run_test("word'with'single\"and\"double");
+	run_test("'\"nested quotes inside single\"'");
+	run_test("\"'nested quotes inside double'\"");
+
+	// 🔹 Переменные
+	run_test("echo $USER");
+	run_test("echo '$NO_EXPAND'");
+	run_test("echo \"$EXPAND\"");
+	run_test("echo text$VARmore");
+	run_test("$$var '$$no' \"$yes\"");
+
+	// 🔹 Смешанные кейсы
 	run_test("echo \"hello $USER\" > file | grep something");
+	run_test("cat <<EOF | grep pattern");
+	run_test("complex \"mix'ed $var\" | 'literal' && (sub \"inner\")");
+
+	// 🔹 Пустые строки и пробелы
 	run_test("");
 	run_test("   ");
+
+	// 🔹 Незакрытые кавычки
 	run_test("\"unfinished");
 	run_test("'unfinished");
-	run_test("\\\"escaped quote\\\"");
-	run_test("word'with'single\"and\"double");
-	run_test("$$var '$$no' \"$yes\"");
-	run_test("<<delim'with quote'");
+
+	// 🔹 Комбинированный набор операторов
 	run_test(">|&();");
-	run_test("complex \"mix'ed $var\" | 'literal' && (sub \"inner\")");
+
 	return (0);
 }
