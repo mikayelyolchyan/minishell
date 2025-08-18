@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 21:43:08 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/18 22:05:42 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/18 22:31:26 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ static size_t	get_word_end(const char *line, size_t i, bool *is_closed)
 
 bool	set_word(t_token *new_token, const char *line, size_t *index)
 {
-	size_t	start;
-	size_t	end;
-	bool	is_closed;
-	size_t	len;
-	char 	q;
+	size_t		start;
+	size_t		end;
+	size_t		len;
+	bool		is_closed;
+	char 		q;
 
 	start = *index;
 	end = get_word_end(line, start, &is_closed);
@@ -79,49 +79,51 @@ bool	set_word(t_token *new_token, const char *line, size_t *index)
 	return (true);
 }
 
-void	set_operator(t_token *new_token, const char *line, size_t *index)
+void	set_control_operator(t_token *new_token, const char *line, \
+								size_t *index)
 {
 	size_t	start;
 
 	start = *index;
-	new_token->type = TYPE_OPERATOR;
+	new_token->type = TYPE_CONTROL_OPERATOR;
 	if (line[*index] == '|' && line[*index + 1] == '|')
-		new_token->op_type = OP_OR;
+		new_token->op_type = CTRL_OP_OR;
 	else if (line[*index] == '&' && line[*index + 1] == '&')
-		new_token->op_type = OP_AND;
+		new_token->op_type = CTRL_OP_AND;
 	else if (line[*index] == '|')
-		new_token->op_type = OP_PIPE;
+		new_token->op_type = CTRL_OP_PIPE;
 	else if (line[*index] == '&')
-		new_token->op_type = OP_BACKGROUND;
+		new_token->op_type = CTRL_OP_BACKGROUND;
 	else if (line[*index] == '(')
-		new_token->op_type = OP_SUBSHELL_OPEN;
+		new_token->op_type = CTRL_OP_SUBSHELL_OPEN;
 	else if (line[*index] == ')')
-		new_token->op_type = OP_SUBSHELL_CLOSE;
+		new_token->op_type = CTRL_OP_SUBSHELL_CLOSE;
 	else if (line[*index] == ';')
-		new_token->op_type = OP_END;
-	if (new_token->op_type == OP_OR || new_token->op_type == OP_AND)
+		new_token->op_type = CTRL_OP_END;
+	if (new_token->op_type == CTRL_OP_OR || new_token->op_type == CTRL_OP_AND)
 		*index += 2;
 	else
 		*index += 1;
 	new_token->value = NULL;
 }
 
-void	set_redirection(t_token *new_token, const char *line, size_t *index)
+void	set_redirection_operator(t_token *new_token, const char *line, \
+									size_t *index)
 {
 	size_t	start;
 
 	start = *index;
-	new_token->type = TYPE_REDIRECTION;
+	new_token->type = TYPE_REDIRECTION_OPERATOR;
 	if (line[*index] == '>' && line[*index + 1] == '>')
-		new_token->redir_type = REDIR_APPEND;
+		new_token->redir_type = REDIR_OP_APPEND;
 	else if (line[*index] == '>')
-		new_token->redir_type = REDIR_OUT;
+		new_token->redir_type = REDIR_OP_OUT;
 	else if (line[*index] == '<' && line[*index + 1] == '<')
-		new_token->redir_type = REDIR_HERE_DOC;
+		new_token->redir_type = REDIR_OP_HERE_DOC;
 	else if (line[*index] == '<')
-		new_token->redir_type = REDIR_IN;
-	if (new_token->redir_type == REDIR_APPEND || \
-		new_token->redir_type == REDIR_HERE_DOC)
+		new_token->redir_type = REDIR_OP_IN;
+	if (new_token->redir_type == REDIR_OP_APPEND || \
+		new_token->redir_type == REDIR_OP_HERE_DOC)
 		*index += 2;
 	else
 		*index += 1;
