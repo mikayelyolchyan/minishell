@@ -82,9 +82,6 @@ bool	set_word(t_token *new_token, const char *line, size_t *index)
 void	set_control_operator(t_token *new_token, const char *line, \
 								size_t *index)
 {
-	size_t	start;
-
-	start = *index;
 	new_token->type = TYPE_CONTROL_OPERATOR;
 	if (line[*index] == '|' && line[*index + 1] == '|')
 		new_token->op_type = CTRL_OP_OR;
@@ -110,9 +107,6 @@ void	set_control_operator(t_token *new_token, const char *line, \
 void	set_redirection_operator(t_token *new_token, const char *line, \
 									size_t *index)
 {
-	size_t	start;
-
-	start = *index;
 	new_token->type = TYPE_REDIRECTION_OPERATOR;
 	if (line[*index] == '>' && line[*index + 1] == '>')
 		new_token->redir_type = REDIR_OP_APPEND;
