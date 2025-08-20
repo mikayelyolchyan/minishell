@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:13 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/18 22:23:10 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:18:29 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,34 @@
 #include "../../include/lexer/utils.h"
 #include <stddef.h>
 
-t_list *tokenize(const char *line)
+static t_token	*create_token(const char *line, size_t *index)
+{
+	t_token	*new_token;
+
+	new_token = ft_calloc(1, sizeof(t_token));
+	if (new_token == NULL)
+		return (NULL);
+	if (is_operator(line[*index]) == true)
+		set_control_operator(new_token, line, index);
+	else if (is_redirection(line[*index]) == true)
+		set_redirection_operator(new_token, line, index);
+	else
+	{
+		if (set_word(new_token, line, index) == false)
+		{
+			del_token(new_token);
+			return (NULL);
+		}
+	}
+	return (new_token);
+}
+
+t_list	*tokenize(const char *line)
 {
 	size_t		index;
 	t_list		*head;
 	t_list		*current;
-	t_token		*new_token;
+	t_token		*new_token;	
 
 	if (!line)
 		return (NULL);
@@ -48,18 +70,9 @@ t_list *tokenize(const char *line)
 			index++;
 		if (line[index] == '\0')
 			break ;
-		new_token = ft_calloc(1, sizeof(t_token));
+		new_token = create_token(line, &index);
 		if (new_token == NULL)
 			return (ft_lstclear(&head, del_token), NULL);
-		if (is_operator(line[index]) == true)
-			set_control_operator(new_token, line, &index);
-		else if (is_redirection(line[index]) == true)
-			set_redirection_operator(new_token, line, &index);
-		else
-		{
-			if (set_word(new_token, line, &index) == false)
-				return (del_token(new_token), ft_lstclear(&head, del_token), NULL);
-		}
 		current = ft_lstnew(new_token);
 		if (current == NULL)
 			return (del_token(new_token), ft_lstclear(&head, del_token), NULL);

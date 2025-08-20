@@ -6,12 +6,35 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 21:43:08 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/18 22:31:26 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:13:31 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/lexer/lexer.h"
 #include "../../include/lexer/utils.h"
+
+static bool	handle_quoted_char(const char *line, size_t i, char *quote)
+{
+	if (*quote == '\'')
+	{
+		if (line[i] == '\'')
+			*quote = '\0';
+	}
+	else if (*quote == '"')
+	{
+		if (line[i] == '"')
+			*quote = '\0';
+	}
+	else
+	{
+		if (is_space(line[i]) || is_operator(line[i]) || \
+			is_redirection(line[i]))
+			return (false);
+		else if (line[i] == '\'' || line[i] == '"')
+			*quote = line[i];
+	}
+	return (true);
+}
 
 static size_t	get_word_end(const char *line, size_t i, bool *is_closed)
 {
@@ -21,24 +44,8 @@ static size_t	get_word_end(const char *line, size_t i, bool *is_closed)
 	*is_closed = true;
 	while (line[i])
 	{
-		if (quote == '\'')
-		{
-			if (line[i] == '\'')
-				quote = '\0';
-		}
-		else if (quote == '"')
-		{
-			if (line[i] == '"')
-				quote = '\0';
-		}
-		else
-		{
-			if (is_space(line[i]) || is_operator(line[i])
-				|| is_redirection(line[i]))
-				break ;
-			else if (line[i] == '\'' || line[i] == '"')
-				quote = line[i];
-		}
+		if (handle_quoted_char(line, i, &quote) == false)
+			break ;
 		i++;
 	}
 	if (quote != '\0')
@@ -50,9 +57,7 @@ bool	set_word(t_token *new_token, const char *line, size_t *index)
 {
 	size_t		start;
 	size_t		end;
-	size_t		len;
 	bool		is_closed;
-	char 		q;
 
 	start = *index;
 	end = get_word_end(line, start, &is_closed);
@@ -62,19 +67,6 @@ bool	set_word(t_token *new_token, const char *line, size_t *index)
 	new_token->value = ft_substr(line, start, end - start);
 	if (new_token->value == NULL)
 		return (false);
-	new_token->quote_type = QUOTE_NONE;
-	len = ft_strlen(new_token->value);
-	if (len >= 2)
-	{
-		q = new_token->value[0];
-		if ((q == '\'' || q == '"') && new_token->value[len - 1] == q)
-		{
-			if (q == '\'')
-				new_token->quote_type = QUOTE_SINGLE;
-			else
-				new_token->quote_type = QUOTE_DOUBLE;
-		}
-	}
 	*index = end;
 	return (true);
 }

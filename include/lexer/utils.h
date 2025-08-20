@@ -6,14 +6,14 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 17:57:19 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/17 00:05:20 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:19:16 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
-#include <stdbool.h>
+# include <stdbool.h>
 
 bool	is_space(int c);
 bool	is_operator(int c);

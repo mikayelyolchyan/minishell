@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/17 19:10:40 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:35:33 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	get_prompt_line(void)
 		tokens = tokenize(line);
 		if (tokens == NULL)
 		{
-			// todo handle tokenizer errors
+			write(2, "minishell: syntax error unclosed quotes\n", 41);
 		}
 		else
 		{

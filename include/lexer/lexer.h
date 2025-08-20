@@ -6,15 +6,15 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:04 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/18 22:32:34 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:19:49 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-#include "../../lib/libft/libft.h"
-#include <stdbool.h>
+# include "../../lib/libft/libft.h"
+# include <stdbool.h>
 
 typedef enum e_token_type
 {
@@ -44,21 +44,12 @@ typedef enum e_redirection_operator_type
 	REDIR_OP_HERE_DOC
 }	t_redirection_operator_type;
 
-typedef enum e_quote_type // set quotes doing expander
-{
-    QUOTE_NONE,
-    QUOTE_SINGLE,
-    QUOTE_DOUBLE
-}	t_quote_type;
-
 typedef struct s_token
 {
 	t_token_type					type;
 	char							*value;
 	t_control_operator_type			op_type;
 	t_redirection_operator_type		redir_type;
-	t_quote_type					quote_type;
-	
 }	t_token;
 
 t_list		*tokenize(const char *line);

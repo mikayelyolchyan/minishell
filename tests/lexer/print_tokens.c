@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:58:52 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/18 22:34:11 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:01:37 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,16 @@ static void	print_redir(t_token *tok)
 		printf("REDIR_HERE_DOC");
 }
 
-static void	print_quote(t_token *tok)
-{
-	printf(", quote_type=");
-	if (tok->quote_type == QUOTE_NONE)
-		printf("QUOTE_NONE");
-	else if (tok->quote_type == QUOTE_SINGLE)
-		printf("QUOTE_SINGLE");
-	else if (tok->quote_type == QUOTE_DOUBLE)
-		printf("QUOTE_DOUBLE");
-}
+//static void	print_quote(t_token *tok)
+//{
+//	printf(", quote_type=");
+//	if (tok->quote_type == QUOTE_NONE)
+//		printf("QUOTE_NONE");
+//	else if (tok->quote_type == QUOTE_SINGLE)
+//		printf("QUOTE_SINGLE");
+//	else if (tok->quote_type == QUOTE_DOUBLE)
+//		printf("QUOTE_DOUBLE");
+//}
 
 void	print_tokens(t_list *tokens)
 {
@@ -71,13 +71,13 @@ void	print_tokens(t_list *tokens)
 		if (tok->type == TYPE_WORD)
 		{
 			printf("TYPE_WORD, value=%s", tok->value);
-			print_quote(tok);
+			//print_quote(tok);
 		}
 		else
 		{
 			print_type(tok);
 			print_redir(tok);
-			print_quote(tok);
+			//print_quote(tok);
 		}
 		printf("\n");
 		current = current->next;
