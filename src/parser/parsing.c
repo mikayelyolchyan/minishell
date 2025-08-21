@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/21 21:01:40 by miyolchy         ###   ########.fr       */
+/*   Created: 2025/08/21 20:58:28 by miyolchy          #+#    #+#             */
+/*   Updated: 2025/08/21 20:59:17 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "../../include/parser/parser.h"
 
-# include "../lexer/lexer.h"
-
-bool	parsing(t_list *tokens);
-bool	syntax_analyze(t_list *tokens);
-
-#endif
+bool	parsing(t_list *tokens)
+{
+	if (syntax_analyze(tokens) == false)
+		return (false);
+	return (true);
+}

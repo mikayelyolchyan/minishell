@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:04 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/20 20:19:49 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/21 19:07:35 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ typedef enum e_redirection_operator_type
 
 typedef struct s_token
 {
-	t_token_type					type;
+	t_token_type					token_type;
 	char							*value;
-	t_control_operator_type			op_type;
-	t_redirection_operator_type		redir_type;
+	t_control_operator_type			ctrl_op_type;
+	t_redirection_operator_type		redir_op_type;
 }	t_token;
 
-t_list		*tokenize(const char *line);
+t_list		*lexical_analyze(const char *line);
 
 void		del_token(void *content);
 

@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:13 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/20 20:18:29 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/21 18:49:57 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include "../../include/lexer/lexer.h"
 #include "../../include/lexer/utils.h"
 #include <stddef.h>
+#include <stdio.h>
 
 static t_token	*create_token(const char *line, size_t *index)
 {
@@ -37,7 +38,7 @@ static t_token	*create_token(const char *line, size_t *index)
 
 	new_token = ft_calloc(1, sizeof(t_token));
 	if (new_token == NULL)
-		return (NULL);
+		return (perror("minishell"), NULL);
 	if (is_operator(line[*index]) == true)
 		set_control_operator(new_token, line, index);
 	else if (is_redirection(line[*index]) == true)
@@ -53,7 +54,7 @@ static t_token	*create_token(const char *line, size_t *index)
 	return (new_token);
 }
 
-t_list	*tokenize(const char *line)
+t_list	*lexical_analyze(const char *line)
 {
 	size_t		index;
 	t_list		*head;

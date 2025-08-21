@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   syntax_analyze.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/15 18:08:01 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:46:21 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,3 +33,37 @@
 		сообщения при некорректном вводе.
 	- Должен поддерживать все синтаксические конструкции, требуемые subject-ом.
 */
+
+#include "../../include/parser/parser.h"
+
+static bool	check_token_syntax(t_list *token, t_token *current_token, t_token *prev_token)
+{
+	if (current_token->token_type == TYPE_CONTROL_OPERATOR)
+	{
+		
+	}
+	else if (current_token->token_type == TYPE_REDIRECTION_OPERATOR)
+	{
+		
+	}
+	return (true);	
+}
+
+bool	syntax_analyze(t_list *tokens)
+{
+	t_token	*current_token; 
+	t_token	*prev_token;
+
+	if (!tokens)
+		return (true);
+	current_token = NULL;
+	while (tokens->content != NULL)
+	{
+		prev_token = current_token;
+		current_token = (t_token*)tokens->content;
+		if (check_token_syntax(tokens, current_token, prev_token) == false)
+			return (false);
+		tokens = tokens->next;
+	}
+	return (true);
+}

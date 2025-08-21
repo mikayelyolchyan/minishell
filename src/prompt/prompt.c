@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/20 20:35:33 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:55:27 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 #include "../../include/prompt/prompt.h"
 #include "../../include/lexer/lexer.h"
+#include "../../include/parser/parser.h"
 
 void		print_tokens(t_list *tokens);
 
@@ -48,28 +49,16 @@ void	get_prompt_line(void)
 			break ;
 		if (line[0] != '\0')
 			add_history(line);
-		tokens = tokenize(line);
+		tokens = lexical_analyze(line);
 		if (tokens == NULL)
 		{
-			write(2, "minishell: syntax error unclosed quotes\n", 41);
+			continue ;
 		}
-		else
+		else if (tokens != NULL)
 		{
+			parsing(tokens);
 			print_tokens(tokens);
-			/*
-				Give a list of tokens to parser for creating 
-							Abstract Syntax Tree
-				
-				example:
-				t_ast ast = parse_tokens(tokens);
-				if (ast)
-				{
-					execute_ast(ast);
-					free_ast(ast);
-				}
-			*/
 		}
-		//printf("You entered: %s\n", line);
 		ft_lstclear(&tokens, del_token);
 		free(line);
 	}
