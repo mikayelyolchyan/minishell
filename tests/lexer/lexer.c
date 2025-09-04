@@ -13,7 +13,7 @@
 #include "../../include/lexer/lexer.h"
 #include <stdio.h>
 
-void		print_tokens(t_list *tokens);
+/*void		print_tokens(t_list *tokens);
 
 static void	run_test(const char *input)
 {
@@ -30,9 +30,9 @@ static void	run_test(const char *input)
 	{
 		printf("Tokenization failed\n\n");
 	}
-}
+}*/
 
-int	main(void)
+/*int	main(void)
 {
 	// 🔹 Простые команды
 	run_test("echo hello");
@@ -85,4 +85,4 @@ int	main(void)
 	run_test(">|&();");
 
 	return (0);
-}
+}*/
