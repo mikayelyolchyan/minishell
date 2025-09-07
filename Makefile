@@ -23,6 +23,7 @@ SRCS = \
     $(LEXER_DIR)utils.c \
     $(PARSER_DIR)parsing.c \
     $(PARSER_DIR)syntax_analyze.c \
+    $(PARSER_DIR)syntax_analyze_utils.c\
     tests/lexer/print_tokens.c \
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
@@ -36,6 +37,7 @@ TEST_SRCS = \
     $(LEXER_DIR)utils.c \
     $(PARSER_DIR)parsing.c\
     $(PARSER_DIR)syntax_analyze.c \
+    $(PARSER_DIR)syntax_analyze_utils.c \
     tests/lexer/syntax_analyze.c\
 
 TEST_OBJS = $(TEST_SRCS:%.c=$(BUILD_DIR)/%.o)

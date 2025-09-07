@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 /*
 	Модуль parser отвечает за разбор (парсинг) строки, введённой пользователем,
 		на отдельные команды, аргументы, пайпы, редиректы,
@@ -36,83 +37,6 @@
 
 #include "../../include/parser/parser.h"
 
-/*static bool	check_token_syntax(t_list *token, t_token *current_token, t_token *prev_token )
-{
-	if (current_token->token_type == TYPE_CONTROL_OPERATOR)
-	{
-		
-	}
-	else if (current_token->token_type == TYPE_REDIRECTION_OPERATOR)
-	{
-		
-	}
-	return (true);	
-}*/
-
-#include <stdio.h>
-/*void print_syntax_error(char *token_value)
-{
-    ft_putstr_fd("bash: syntax error near unexpected token `", 2);
-    ft_putstr_fd(token_value, 2);
-    ft_putstr_fd("'\n", 2);
-}*/
-
-
-void print_syntax_error(char *token_value)
-{
-    ft_putstr_fd("bash: syntax error near unexpected token `", 2);
-    if (token_value && *token_value)
-        ft_putstr_fd(token_value, 2);
-    else
-        ft_putstr_fd("(null)", 2);  
-    ft_putstr_fd("'\n", 2);
-}
-
-int subshell_open_count(t_list *tokens)
-{
-	int open_count = 0;
-	t_list *current = tokens;
-	t_token *token;
-
-	while(current != NULL)
-	{
-		token = (t_token *)current->content;
-		if(token->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
-			open_count++;
-		current = current->next;
-	}
-	return (open_count);
-}
-int subshell_closed_count(t_list *tokens)
-{
-    int close_count = 0;
-    t_list *current = tokens;
-    t_token *token;
-    
-    while (current != NULL)
-    {
-        token = (t_token *)current->content;
-        if (token->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
-            close_count++;
-        current = current->next;
-    }
-    return (close_count);
-}
-bool check_subshell_balance(t_list *tokens)
-{
-    int open_count = subshell_open_count(tokens) ;
-    int close_count = subshell_closed_count(tokens);
-    
-    if (open_count != close_count)
-    {
-        if (open_count > close_count)
-            print_syntax_error("newline");
-        else
-            print_syntax_error(")");
-        return false;
-    }
-    return true;
-}
 
 bool check_subshell_syntax(t_token *current_token, t_token *next_token)
 {
@@ -133,31 +57,33 @@ bool check_subshell_syntax(t_token *current_token, t_token *next_token)
             print_syntax_error(next_token->value);
             return false;
         }
+        
 	}
-	return(true);
+    return true;
 }
-
-//t_list *tokens
-
+bool chek_ctrl_operator_syntax(t_token *current_token, t_token *next_token)
+{
+    if (!next_token)
+    {
+        print_syntax_error("newline");
+        return (false);
+    }
+    else if (next_token->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN || 
+            next_token->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
+            return check_subshell_syntax(current_token, next_token);
+    else if(next_token && next_token->token_type == TYPE_CONTROL_OPERATOR)
+	{
+				print_syntax_error(next_token->value);
+				return(false);
+	}
+    return (true);
+}
+   
 bool check_token_syntax( t_token *current_token, t_token *next_token)
 {
 	if (current_token->token_type == TYPE_CONTROL_OPERATOR )
 	{
-		if (current_token->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN || 
-            current_token->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
-        {
-            return check_subshell_syntax(current_token, next_token);
-        }
-		if(next_token && next_token->token_type == TYPE_CONTROL_OPERATOR)
-		{
-				print_syntax_error(next_token->value);
-				return(false);
-		}
-		if (!next_token)
-        {
-            print_syntax_error("newline");
-            return false;
-        }
+		chek_ctrl_operator_syntax(current_token, next_token);
 	}
 	else if (current_token->token_type == TYPE_REDIRECTION_OPERATOR)
 	{
@@ -180,6 +106,7 @@ bool check_token_syntax( t_token *current_token, t_token *next_token)
     }
 	return (true);	
 }
+
 bool check_operator_combinations_for_redirection(t_list *tokens)
 {
     t_list *current = tokens;
@@ -196,31 +123,11 @@ bool check_operator_combinations_for_redirection(t_list *tokens)
             print_syntax_error(token2->value);
             return false;
         }
-        
         current = current->next;
     }
     return true;
 }
 
-
-void debug_print_tokens(t_list *tokens)
-{
-    t_list *current = tokens;
-    t_token *token;
-    int i = 0;
-    
-    printf("=== DEBUG: Tokens ===\n");
-    while (current)
-    {
-        token = (t_token *)current->content;
-        printf("[%d] Type: %d, Ctrl_op: %d, Value: '%s'\n", 
-               i, token->token_type, token->ctrl_op_type, 
-               token->value ? token->value : "(null)");
-        current = current->next;
-        i++;
-    }
-    printf("===================\n");
-}
 
 bool syntax_analyze(t_list *tokens)
 {
@@ -231,9 +138,6 @@ bool syntax_analyze(t_list *tokens)
 
 	if(!tokens)
 		return(true);
-
-     debug_print_tokens(tokens); 
-
 	if (!check_subshell_balance(tokens))
         return false;
 	if (!check_operator_combinations_for_redirection(tokens))
@@ -247,7 +151,7 @@ bool syntax_analyze(t_list *tokens)
     {
         current_token = (t_token *)current_list->content;
         next_token = (t_token *)current_list->next->content;
-        if (!check_token_syntax( current_token, next_token))
+        if (!check_token_syntax(current_token, next_token))
             return false;   
         current_list = current_list->next;
     }
@@ -261,5 +165,3 @@ bool syntax_analyze(t_list *tokens)
     }
 	return (true);
 }
-
-

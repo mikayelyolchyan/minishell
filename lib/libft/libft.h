@@ -23,6 +23,8 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+
+
 void	ft_bzero(void *s, size_t n);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putstr_fd(char *s, int fd);

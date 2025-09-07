@@ -34,15 +34,16 @@ static void	run_test(const char *input)
 	printf("Input: %s\n", input);
 	//tokens = tokenize(input);
     tokens = lexical_analyze(input);
-	bool result = syntax_analyze(tokens);
-    if(result == false)
+	//bool result = syntax_analyze(tokens);
+    syntax_analyze(tokens);
+   /* if(result == false)
         printf("Syntax analyze failed, invalid input\n");
     else if (result == true)
     {
         printf("Syntax analyze SUCSSES\n");
     }
     else
-        printf("idk what happened\n");
+        printf("idk what happened\n");*/
     free_tokens(tokens);
 
 }

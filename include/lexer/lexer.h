@@ -15,6 +15,7 @@
 
 # include "../../lib/libft/libft.h"
 # include <stdbool.h>
+# include <stdio.h>
 
 typedef enum e_token_type
 {
@@ -69,6 +70,5 @@ void		set_control_operator(t_token *new_token, const char *line, \
 void		set_redirection_operator(t_token *new_token, const char *line, \
 										size_t *index);
 bool		set_word(t_token *new_token, const char *line, size_t *index);
-
 
 #endif
