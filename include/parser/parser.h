@@ -15,6 +15,14 @@
 
 # include "../lexer/lexer.h"
 
+typedef struct s_ast_node
+{
+	struct s_ast_node *left;
+	struct s_ast_node *right;
+	t_token *value;
+} t_ast_node;
+
+
 void print_syntax_error(char *token_value);
 
 int subshell_open_count(t_list *tokens);
@@ -33,5 +41,12 @@ bool check_operator_combinations_for_redirection(t_list *tokens);
 
 bool	parsing(t_list *tokens);
 bool	syntax_analyze(t_list *tokens);
+
+t_ast_node **parse_logicale_operator(t_token **current_token);
+t_ast_node **parse_pipeline(t_token **current_token);
+t_ast_node **parse_command(t_token **current_token);
+t_ast_node **parse_subshell(t_token **current_token);
+t_ast_node **parse_redirection(t_token **current_token);
+
 
 #endif

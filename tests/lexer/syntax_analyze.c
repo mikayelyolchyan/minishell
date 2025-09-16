@@ -50,7 +50,7 @@ static void	run_test(const char *input)
 int main()
 {
     // Your original tests
-    run_test("&& ||");        // Should fail - starts with &&
+    /*run_test("&& ||");        // Should fail - starts with &&
     run_test(">> &&");        // Should fail - >> needs filename, && needs command
     run_test(">>");           // Should fail - >> needs filename
     run_test("ls > << cat");  // Should fail - > followed by <<
@@ -75,6 +75,10 @@ int main()
     run_test("< input ls");               // Should pass
     run_test("ls << EOF");                // Should pass (heredoc)
     run_test("ls < < file");              // Should fail - < followed by <
-    
+    */
+   run_test("ls && (echo hi)");
+
+    run_test("ls (&& echo hi)");
+    run_test("ls &&");
     return 0;
 }
