@@ -6,7 +6,7 @@
 /*   By: mminasya <mminasya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/17 19:04:46 by mminasya         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:09:10 by mminasya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,9 @@ bool check_token_syntax( t_list *current_token)
             return false;
         }
     }
-	// else if (current->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
-	// 	return (check_subshell_syntax(current_token));
 	return (true);	
 }
+
 
 bool check_operator_combinations_for_redirection(t_list *tokens)
 {
