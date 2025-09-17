@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analyze.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mminasya <mminasya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/21 20:46:21 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:04:46 by mminasya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 /*
 	Модуль parser отвечает за разбор (парсинг) строки, введённой пользователем,
@@ -42,12 +41,12 @@ bool check_subshell_syntax(t_list *current_token)
 {
 	t_token	*current;
 	t_token	*next;
-
+	
 	current = (t_token *)current_token->content;
 	next = (t_token *)current_token->next->content;
 	if(current->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
 	{
-		if (next && next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
+		if (next && (next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN || next->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE))
 			return (check_subshell_syntax(current_token->next));
 		if (next && (next->token_type == TYPE_CONTROL_OPERATOR || 
             next->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE))
@@ -69,14 +68,18 @@ bool check_subshell_syntax(t_list *current_token)
 }
 bool chek_ctrl_operator_syntax(t_list *current_token)
 {
+	t_token	*current;
 	t_token	*next;
 
+	current = (t_token *)current_token->content;
 	next = (t_token *)current_token->next->content;
     if (!next)
     {
         print_syntax_error("newline");
         return (false);
     }
+	else if (current->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
+		return check_subshell_syntax(current_token);
     else if (next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN || 
             next->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
             return check_subshell_syntax(current_token);
@@ -96,9 +99,7 @@ bool check_token_syntax( t_list *current_token)
 	current = (t_token *)current_token->content;
 	next = (t_token *)current_token->next->content;
 	if (current->token_type == TYPE_CONTROL_OPERATOR )
-	{
 		return (chek_ctrl_operator_syntax(current_token));
-	}
 	else if (current->token_type == TYPE_REDIRECTION_OPERATOR)
 	{
 		if(!next || next->token_type != TYPE_WORD)
@@ -118,6 +119,8 @@ bool check_token_syntax( t_list *current_token)
             return false;
         }
     }
+	// else if (current->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
+	// 	return (check_subshell_syntax(current_token));
 	return (true);	
 }
 
