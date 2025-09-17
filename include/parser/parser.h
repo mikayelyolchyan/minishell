@@ -23,6 +23,7 @@ typedef struct s_ast_node
 } t_ast_node;
 
 
+
 void print_syntax_error(char *token_value);
 
 int subshell_open_count(t_list *tokens);

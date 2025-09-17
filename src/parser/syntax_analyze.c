@@ -83,7 +83,7 @@ bool check_token_syntax( t_token *current_token, t_token *next_token)
 {
 	if (current_token->token_type == TYPE_CONTROL_OPERATOR )
 	{
-		chek_ctrl_operator_syntax(current_token, next_token);
+		return (chek_ctrl_operator_syntax(current_token, next_token));
 	}
 	else if (current_token->token_type == TYPE_REDIRECTION_OPERATOR)
 	{
