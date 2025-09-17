@@ -2,28 +2,56 @@
 
 
 // Grammar rules for a simple shell parser
-subshell && || | cmd 
+/*subshell && || | cmd 
 parse_line
     ↳ parse_logical   // handles && and ||
         ↳ parse_pipeline   // handles |
             ↳ parse_command   // a simple command
-                ↳ parse_redirection   // attaches < > >> <<
+                ↳ parse_redirection   // attaches < > > >>
 
-typedef struct s_redir
+*/
+
+typedef enum e_node_type
 {
-    t_redir_type     type;
+    NODE_COMMAND,
+    NODE_PIPE,
+    NODE_LOGICAL,
+    NODE_SUBSHELL
+} t_node_type;
+
+typedef struct  s_redirection_list
+{
+    t_redirection_operator_type     type;
     char            *target;      
-    struct s_redir  *next;       
-}   t_redir;
+    struct s_redirection_list  *next;       
+}   t_redirection_list;
 
-typedef struct s_command
+
+
+typedef struct s_command_list
 {
-    char        **args;          // Command and its arguments
-    t_redir     *redirections;   // Linked list of redirections
+    char        **arguments;          // Command and its arguments
+    struct s_redirection_list     *redirections;   // Linked list of redirections
 }   t_command;
 
+typedef struct s_ast_node
+{
+    t_node_type type;
 
+    t_token *token;     
+    t_command *command;  
+    
+    struct s_ast_node *left;
+    struct s_ast_node *right;
+} t_ast_node;
 
+/*typedef struct s_ast_node
+{
+	struct s_ast_node *left;
+	struct s_ast_node *right;
+	t_token *value;
+} t_ast_node;*/
+ 
 
 t_ast_node *parse_logicale_operator(t_list **current_token)
 {
@@ -37,7 +65,7 @@ t_ast_node *parse_logicale_operator(t_list **current_token)
         new_node = malloc(sizeof(t_ast_node));
         if (!new_node)
             return (NULL);
-        new_node->value = *current_token;
+        new_node->content = *current_token;
         new_node->left = node;
         *current_token = (*current_token)->next;
         new_node->right = parse_pipeline(current_token);
@@ -81,7 +109,7 @@ t_ast_node *parse_command(t_list **current_token)
             node->left = NULL;
             node->right = NULL;
         }
-    else if ((*current_token)->content->token_type == TYPE_REDIRECTION_OPERATOR)
+    else if (((t_token *)(*current_token)->content)->token_type == TYPE_REDIRECTION_OPERATOR)
         node = parse_redirection(current_token);
     else
         return (NULL);
@@ -109,14 +137,6 @@ t_ast_node *parse_subshell(t_list **current_token)
         }
     }
     return (NULL);
-}
-
-
-
-
-t_ast_node **parse_redirection(t_token **current_token)
-{
-
 }
 
 

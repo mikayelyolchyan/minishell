@@ -38,69 +38,83 @@
 #include "../../include/parser/parser.h"
 
 
-bool check_subshell_syntax(t_token *current_token, t_token *next_token)
+bool check_subshell_syntax(t_list *current_token)
 {
-	
-	if(current_token->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
+	t_token	*current;
+	t_token	*next;
+
+	current = (t_token *)current_token->content;
+	next = (t_token *)current_token->next->content;
+	if(current->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
 	{
-		if (next_token && (next_token->token_type == TYPE_CONTROL_OPERATOR || 
-            next_token->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE))
+		if (next && next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
+			return (check_subshell_syntax(current_token->next));
+		if (next && (next->token_type == TYPE_CONTROL_OPERATOR || 
+            next->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE))
         {
-            print_syntax_error(next_token->value);
+            print_syntax_error(next->value);
             return false;
         }
 	}
-	else if (current_token->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
+	else if (current->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
 	{
-		if (next_token && next_token->token_type == TYPE_WORD)
+		if (next && next->token_type == TYPE_WORD)
         {
-            print_syntax_error(next_token->value);
+            print_syntax_error(next->value);
             return false;
         }
         
 	}
     return true;
 }
-bool chek_ctrl_operator_syntax(t_token *current_token, t_token *next_token)
+bool chek_ctrl_operator_syntax(t_list *current_token)
 {
-    if (!next_token)
+	t_token	*next;
+
+	next = (t_token *)current_token->next->content;
+    if (!next)
     {
         print_syntax_error("newline");
         return (false);
     }
-    else if (next_token->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN || 
-            next_token->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
-            return check_subshell_syntax(current_token, next_token);
-    else if(next_token && next_token->token_type == TYPE_CONTROL_OPERATOR)
+    else if (next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN || 
+            next->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
+            return check_subshell_syntax(current_token);
+    else if(next && next->token_type == TYPE_CONTROL_OPERATOR)
 	{
-				print_syntax_error(next_token->value);
+				print_syntax_error(next->value);
 				return(false);
 	}
     return (true);
 }
    
-bool check_token_syntax( t_token *current_token, t_token *next_token)
+bool check_token_syntax( t_list *current_token)
 {
-	if (current_token->token_type == TYPE_CONTROL_OPERATOR )
+	t_token	*current;
+	t_token	*next;
+
+	current = (t_token *)current_token->content;
+	next = (t_token *)current_token->next->content;
+	if (current->token_type == TYPE_CONTROL_OPERATOR )
 	{
-		return (chek_ctrl_operator_syntax(current_token, next_token));
+		return (chek_ctrl_operator_syntax(current_token));
 	}
-	else if (current_token->token_type == TYPE_REDIRECTION_OPERATOR)
+	else if (current->token_type == TYPE_REDIRECTION_OPERATOR)
 	{
-		if(!next_token || next_token->token_type != TYPE_WORD)
+		if(!next || next->token_type != TYPE_WORD)
 		{
-			if (next_token)
-                print_syntax_error(next_token->value);
+			if (next)
+                print_syntax_error(next->value);
             else
                 print_syntax_error("newline");
             return false;
 		}
 	}
-	else if (current_token->token_type == TYPE_WORD)
+	else if (current->token_type == TYPE_WORD)
     {
-        if (next_token && next_token->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
+        if (next && next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
         {
-            print_syntax_error(next_token->value);
+            print_syntax_error(next->value);
             return false;
         }
     }
@@ -132,8 +146,6 @@ bool check_operator_combinations_for_redirection(t_list *tokens)
 bool syntax_analyze(t_list *tokens)
 {
 	t_token *current_token;
-	t_token *next_token;
-	t_token *first_token;
 	t_list *current_list;
 
 	if(!tokens)
@@ -142,16 +154,14 @@ bool syntax_analyze(t_list *tokens)
         return false;
 	if (!check_operator_combinations_for_redirection(tokens))
         return false;
-	first_token = (t_token *)tokens->content;
-	if(first_token->token_type == TYPE_CONTROL_OPERATOR  
-		&& first_token->ctrl_op_type != CTRL_OP_SUBSHELL_OPEN)
-		return(print_syntax_error(first_token->value), false);
+	current_token = (t_token *)tokens->content;
+	if (current_token->token_type == TYPE_CONTROL_OPERATOR  
+		&& current_token->ctrl_op_type != CTRL_OP_SUBSHELL_OPEN)
+		return(print_syntax_error(current_token->value), false);
 	current_list = tokens;
 	while (current_list && current_list->next)
     {
-        current_token = (t_token *)current_list->content;
-        next_token = (t_token *)current_list->next->content;
-        if (!check_token_syntax(current_token, next_token))
+        if (!check_token_syntax(current_list))
             return false;   
         current_list = current_list->next;
     }

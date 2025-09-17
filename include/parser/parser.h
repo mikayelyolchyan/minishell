@@ -32,11 +32,11 @@ int subshell_closed_count(t_list *tokens);
 
 bool check_subshell_balance(t_list *tokens);
 
-bool check_subshell_syntax(t_token *current_token, t_token *next_token);
+bool check_subshell_syntax(t_list *current_token);
 
-bool chek_ctrl_operator_syntax(t_token *current_token, t_token *next_token);
+bool chek_ctrl_operator_syntax(t_list *current_token);
 
-bool check_token_syntax( t_token *current_token, t_token *next_token);
+bool check_token_syntax( t_list *current_token);
 
 bool check_operator_combinations_for_redirection(t_list *tokens);
 
