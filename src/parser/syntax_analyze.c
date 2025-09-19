@@ -66,6 +66,7 @@ bool check_subshell_syntax(t_list *current_token)
 	}
     return true;
 }
+
 bool chek_ctrl_operator_syntax(t_list *current_token)
 {
 	t_token	*current;
@@ -144,7 +145,32 @@ bool check_operator_combinations_for_redirection(t_list *tokens)
     return true;
 }
 
-
+bool chek_closed_quotes(t_list *tokens)
+{
+	int i;
+	i = 0;
+	char *current_data;
+	t_token *current_token;
+	current_token = (t_token *)tokens->content;
+	current_data = current_token->value;
+	char c; 
+	int open = 0;
+	while(current_data[i])
+	{
+		if((current_data[i] == '"' || current_data[i] == '\'') && open == 0)
+		{
+			c = current_data[i];
+			open = 1;
+		}
+		else if ((current_data[i] == '"' || current_data[i] == '\'') && 
+			open == 1 && current_data[i] == c)
+			open = 0;
+		i++;
+	}
+	if(open != 0)
+		return (false);
+	return true;
+}
 bool syntax_analyze(t_list *tokens)
 {
 	t_token *current_token;
@@ -165,6 +191,8 @@ bool syntax_analyze(t_list *tokens)
     {
         if (!check_token_syntax(current_list))
             return false;   
+		else if(!chek_closed_quotes(current_list))
+			return (print_syntax_error("newline"), false);
         current_list = current_list->next;
     }
 	if (current_list)
