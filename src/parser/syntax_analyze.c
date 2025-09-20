@@ -147,12 +147,13 @@ bool check_operator_combinations_for_redirection(t_list *tokens)
 
 bool chek_closed_quotes(t_list *tokens)
 {
-	int i;
-	i = 0;
+	int i = 0;
 	char *current_data;
+
 	t_token *current_token;
 	current_token = (t_token *)tokens->content;
-	current_data = current_token->value;
+	current_data = (char *)current_token->value;
+	
 	char c; 
 	int open = 0;
 	while(current_data[i])
@@ -164,7 +165,9 @@ bool chek_closed_quotes(t_list *tokens)
 		}
 		else if ((current_data[i] == '"' || current_data[i] == '\'') && 
 			open == 1 && current_data[i] == c)
+		{
 			open = 0;
+		}
 		i++;
 	}
 	if(open != 0)
@@ -189,10 +192,8 @@ bool syntax_analyze(t_list *tokens)
 	current_list = tokens;
 	while (current_list && current_list->next)
     {
-        if (!check_token_syntax(current_list))
+        if (!check_token_syntax(current_list) || !chek_closed_quotes(current_list))
             return false;   
-		else if(!chek_closed_quotes(current_list))
-			return (print_syntax_error("newline"), false);
         current_list = current_list->next;
     }
 	if (current_list)
@@ -200,7 +201,7 @@ bool syntax_analyze(t_list *tokens)
         current_token = (t_token *)current_list->content;
         if (current_token->token_type == TYPE_REDIRECTION_OPERATOR ||
             (current_token->token_type == TYPE_CONTROL_OPERATOR && 
-             current_token->ctrl_op_type != CTRL_OP_SUBSHELL_CLOSE))
+             current_token->ctrl_op_type != CTRL_OP_SUBSHELL_CLOSE) || (current_token->token_type == TYPE_WORD && !chek_closed_quotes(current_list)))
             	return (print_syntax_error("newline"), false);
     }
 	return (true);
