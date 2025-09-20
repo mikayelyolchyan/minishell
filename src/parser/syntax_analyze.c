@@ -174,6 +174,30 @@ bool chek_closed_quotes(t_list *tokens)
 		return (false);
 	return true;
 }
+
+bool chek_here_doc_count(t_list *tokens)
+{
+	t_token *current_token;
+	t_token *last_token;
+
+	int here_doc_count = 0;
+	while(tokens && tokens->next)
+	{
+		current_token = (t_token *)tokens->content;
+		if(current_token->redir_op_type == REDIR_OP_HERE_DOC)
+			here_doc_count++;
+		tokens = tokens->next;
+	}
+	if(tokens)
+	{
+		last_token = (t_token *)tokens->content;
+		if(last_token->redir_op_type == REDIR_OP_HERE_DOC)
+			here_doc_count++;
+	}
+	if(here_doc_count >= 16)
+		return(false);
+	return true;
+}
 bool syntax_analyze(t_list *tokens)
 {
 	t_token *current_token;
@@ -181,6 +205,8 @@ bool syntax_analyze(t_list *tokens)
 
 	if(!tokens)
 		return(true);
+	if(!chek_here_doc_count(tokens))
+		return(ft_putstr_fd("bash: maximum here-document count exceeded\n", 2), false);
 	if (!check_subshell_balance(tokens))
         return false;
 	if (!check_operator_combinations_for_redirection(tokens))

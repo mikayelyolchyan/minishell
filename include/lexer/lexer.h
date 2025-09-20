@@ -36,13 +36,6 @@ typedef enum e_control_operator_type
 	CTRL_OP_BACKGROUND 
 }	t_control_operator_type;
 
-/*typedef enum e_control_operator_subshell_type
-{
-	CTRL_OP_SUBSHELL_NON,
-	CTRL_OP_SUBSHELL_OPEN,
-	CTRL_OP_SUBSHELL_CLOSE,
-} t_control_operator_subshell_type;*/
-
 typedef enum e_redirection_operator_type
 {
 	REDIR_OP_NONE,
