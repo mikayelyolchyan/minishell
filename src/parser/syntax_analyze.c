@@ -193,7 +193,11 @@ bool syntax_analyze(t_list *tokens)
 	while (current_list && current_list->next)
     {
         if (!check_token_syntax(current_list) || !chek_closed_quotes(current_list))
-            return false;   
+		{
+			if(!chek_closed_quotes(current_list))
+				print_syntax_error("newline");
+            return false;
+		}
         current_list = current_list->next;
     }
 	if (current_list)
