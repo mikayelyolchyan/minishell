@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/21 21:01:40 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/22 16:26:22 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,28 @@ typedef struct s_ast_node
 	t_token *value;
 } t_ast_node;
 
+bool	parsing(t_list *tokens);
 
+void	print_syntax_error(char *token_value);
 
-void print_syntax_error(char *token_value);
+bool syntax_analyze(t_list *tokens);
 
-int subshell_open_count(t_list *tokens);
-
-int subshell_closed_count(t_list *tokens);
-
-bool check_subshell_balance(t_list *tokens);
+bool check_token_syntax(t_list *current_token);
 
 bool check_subshell_syntax(t_list *current_token);
+bool check_subshell_balance(t_list *tokens);
 
-bool chek_ctrl_operator_syntax(t_list *current_token);
-
-bool check_token_syntax( t_list *current_token);
+bool check_ctrl_operator_syntax(t_list *current_token);
 
 bool check_operator_combinations_for_redirection(t_list *tokens);
+bool check_here_doc_count(t_list *tokens);
 
-bool	parsing(t_list *tokens);
-bool	syntax_analyze(t_list *tokens);
+bool check_closed_quotes(t_list *tokens);
 
 t_ast_node **parse_logicale_operator(t_token **current_token);
 t_ast_node **parse_pipeline(t_token **current_token);
 t_ast_node **parse_command(t_token **current_token);
 t_ast_node **parse_subshell(t_token **current_token);
 t_ast_node **parse_redirection(t_token **current_token);
-
 
 #endif
