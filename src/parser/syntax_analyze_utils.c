@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 16:36:28 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/22 16:36:43 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:58:33 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,20 @@ void	print_syntax_error(char *token_value)
 	ft_putstr_fd("bash: syntax error near unexpected token `", 2);
 	ft_putstr_fd(token_value, 2);
 	ft_putstr_fd("'\n", 2);
+}
+
+bool	is_dollar_before_subshell(t_token *current, t_list *tokens)
+{
+	t_token	*next;
+
+	if (!tokens->next)
+		return (false);
+	next = (t_token *)tokens->next->content;
+	return (current->token_type == TYPE_WORD && \
+			ft_strncmp(current->value, "$", ft_strlen(current->value)) == 0 && \
+			ft_strlen(current->value) == 1 && \
+			next->token_type == TYPE_CONTROL_OPERATOR && \
+			next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN);
 }
 
 int	subshell_open_count(t_list *tokens)

@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/22 16:38:35 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:59:48 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 */
 
 #include "../../include/parser/parser.h"
+#include "../../lib/libft/libft.h"
 
 static bool	check_initial_tokens(t_list *tokens)
 {
@@ -43,6 +44,8 @@ static bool	check_initial_tokens(t_list *tokens)
 	if (!tokens)
 		return (true);
 	current_token = (t_token *)tokens->content;
+	if (is_dollar_before_subshell(current_token, tokens))
+		return (true);
 	if (current_token->token_type == TYPE_CONTROL_OPERATOR && \
 		current_token->ctrl_op_type != CTRL_OP_SUBSHELL_OPEN)
 		return (print_syntax_error(current_token->value), false);

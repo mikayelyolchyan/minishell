@@ -6,7 +6,7 @@
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/22 16:26:22 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:51:43 by miyolchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ bool check_token_syntax(t_list *current_token);
 
 bool check_subshell_syntax(t_list *current_token);
 bool check_subshell_balance(t_list *tokens);
+bool is_dollar_before_subshell(t_token *current, t_list *tokens);
 
 bool check_ctrl_operator_syntax(t_list *current_token);
 
