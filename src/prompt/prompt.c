@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
+/*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/21 20:55:27 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/24 17:24:41 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,62 @@
 #include "../../include/prompt/prompt.h"
 #include "../../include/lexer/lexer.h"
 #include "../../include/parser/parser.h"
+
+/*void		print_tokens(t_list *tokens);
+
+void	get_prompt_line(char *enviornment)
+{
+	char		*line;
+	t_list		*tokens;
+
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (!line)
+			break ;
+		if (line[0] != '\0')
+			add_history(line);
+		tokens = lexical_analyze(line);
+		if (tokens == NULL)
+		{void		print_tokens(t_list *tokens);
+
+void	get_prompt_line(void)
+{
+	char		*line;
+	t_list		*tokens;
+
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (!line)
+			break ;
+		if (line[0] != '\0')
+			add_history(line);
+		tokens = lexical_analyze(line);
+		if (tokens == NULL)
+		{
+			continue ;
+		}
+		else if (tokens != NULL)
+		{
+			parsing(tokens);
+			print_tokens(tokens);
+		}
+		ft_lstclear(&tokens, del_token);
+		free(line);
+	}
+}
+			continue ;
+		}
+		else if (tokens != NULL)
+		{
+			parsing(tokens);
+			print_tokens(tokens);
+		}
+		ft_lstclear(&tokens, del_token);
+		free(line);
+	}
+}*/
 
 void		print_tokens(t_list *tokens);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analyze.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mminasya <mminasya@student.42.fr>          +#+  +:+       +#+        */
+/*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/17 19:09:10 by mminasya         ###   ########.fr       */
+/*   Updated: 2025/09/20 20:51:56 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ bool syntax_analyze(t_list *tokens)
 	if(!tokens)
 		return(true);
 	if(!chek_here_doc_count(tokens))
-		return(ft_putstr_fd("bash: maximum here-document count exceeded\n", 2), false);
+		return(ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2), false);
 	if (!check_subshell_balance(tokens))
         return false;
 	if (!check_operator_combinations_for_redirection(tokens))
@@ -227,9 +227,7 @@ bool syntax_analyze(t_list *tokens)
 	if (current_list)
     {
         current_token = (t_token *)current_list->content;
-        if (current_token->token_type == TYPE_REDIRECTION_OPERATOR ||
-            (current_token->token_type == TYPE_CONTROL_OPERATOR && 
-             current_token->ctrl_op_type != CTRL_OP_SUBSHELL_CLOSE) || (current_token->token_type == TYPE_WORD && !chek_closed_quotes(current_list)))
+        if (current_token->token_type == TYPE_REDIRECTION_OPERATOR || (current_token->token_type == TYPE_CONTROL_OPERATOR && current_token->ctrl_op_type != CTRL_OP_SUBSHELL_CLOSE) || (current_token->token_type == TYPE_WORD && !chek_closed_quotes(current_list)))
             	return (print_syntax_error("newline"), false);
     }
 	return (true);

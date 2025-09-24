@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
+/*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:43 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/16 17:27:17 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/24 17:22:52 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,5 @@ int	main(int argc, char **argv, char **envp)
 	get_prompt_line();
 	return (0);
 }
+
+
