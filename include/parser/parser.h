@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/24 17:47:00 by madlen           ###   ########.fr       */
+/*   Updated: 2025/09/24 21:19:38 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,22 @@ t_ast_node *ast_logical(t_list **current_token);
 t_ast_node *build_ast(t_list *token);
 t_ast_node *ast_subshell(t_list **current_token);
 bool append_argument(t_command *cmd, const char *arg);
-bool handle_redirection(t_command *cmd, t_list **current_token);
+//bool handle_redirection(t_command *cmd, t_list **current_token);
 t_ast_node *ast_command(t_list **current_token);
 void print_ast_command(t_ast_node *node);
 void free_redir_list(t_redir *redir);
 void free_command(t_command *cmd);
 void print_ast_recursive(t_ast_node *node, int depth);
 void print_ast(t_ast_node *ast);
+t_ast_node *init_command_node(void);
+bool process_word_token(t_ast_node *node, t_command *cmd,  t_token *token, bool *has_command);
+void parse_command_tokens(t_ast_node *node, t_command *cmd, t_list **current_token);
+t_ast_node *build_command_node(t_list **current_token);
+bool handle_redirection(t_command *cmd, t_list **current_token);
+t_redir *init_redirection(t_token *token);
+bool assign_redirection_filename(t_redir *new_redir, t_list **current_token);
+void insert_redirection(t_command *cmd, t_redir *new_redir);
+
 
 
 #endif
