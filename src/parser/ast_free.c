@@ -6,18 +6,18 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 22:27:11 by madlen            #+#    #+#             */
-/*   Updated: 2025/09/24 22:31:17 by madlen           ###   ########.fr       */
+/*   Updated: 2025/09/24 23:03:28 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parser/parser.h"
 
-void free_string_array(char **array)
+void	free_string_array(char **array)
 {
-	int i;
+	int	i;
 
 	if (!array)
-		return;
+		return ;
 	i = 0;
 	while (array[i])
 	{
@@ -27,12 +27,12 @@ void free_string_array(char **array)
 	free(array);
 }
 
-
-void free_redir_list(t_redir *redir)
+void	free_redir_list(t_redir *redir)
 {
-	t_redir *tmp;
-	if(!redir)
-		return;
+	t_redir	*tmp;
+
+	if (!redir)
+		return ;
 	while (redir)
 	{
 		tmp = redir->next;
@@ -41,21 +41,20 @@ void free_redir_list(t_redir *redir)
 		redir = tmp;
 	}
 }
-	
 
-void free_command(t_command *cmd)
+void	free_command(t_command *cmd)
 {
-	if (!cmd) 
-		return;
+	if (!cmd)
+		return ;
 	free_string_array(cmd->argument);
 	free_redir_list(cmd->redir);
 	free(cmd);
 }
 
-void free_ast(t_ast_node *node)
+void	free_ast(t_ast_node *node)
 {
 	if (!node)
-		return;
+		return ;
 	free_ast(node->left);
 	free_ast(node->right);
 	if (node->command)

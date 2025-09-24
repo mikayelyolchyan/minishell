@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/24 21:19:38 by madlen           ###   ########.fr       */
+/*   Updated: 2025/09/24 23:07:08 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,29 @@
 
 typedef struct s_ast_node
 {
-	struct s_ast_node *left;
-	struct s_ast_node *right;
-	t_token *value;
-	struct s_command *command;
-	
-} t_ast_node;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+	t_token				*value;
+	struct s_command	*command;
+}	t_ast_node;
 
 typedef struct s_redir
 {
-	char *filename;
-	t_redirection_operator_type redir_type;
-	struct s_redir *next;	
-} t_redir;
+	char						*filename;
+	t_redirection_operator_type	redir_type;
+	struct s_redir				*next;	
+}	t_redir;
 
 typedef struct s_command
 {
-	char **argument;
-	struct s_redir *redir;
+	char			**argument;
+	struct s_redir	*redir;
 
-} t_command;
+}	t_command ;
 
-
-void print_syntax_error(char *token_value);
-
-int subshell_open_count(t_list *tokens);
-
-int subshell_closed_count(t_list *tokens);
-
+void	print_syntax_error(char *token_value);
+int	subshell_open_count(t_list *tokens);
+int	subshell_closed_count(t_list *tokens);
 bool check_subshell_balance(t_list *tokens);
 
 bool check_subshell_syntax(t_list *current_token);
@@ -84,7 +79,4 @@ bool handle_redirection(t_command *cmd, t_list **current_token);
 t_redir *init_redirection(t_token *token);
 bool assign_redirection_filename(t_redir *new_redir, t_list **current_token);
 void insert_redirection(t_command *cmd, t_redir *new_redir);
-
-
-
 #endif

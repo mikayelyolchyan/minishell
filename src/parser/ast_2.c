@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/24 22:33:22 by madlen           ###   ########.fr       */
+/*   Updated: 2025/09/24 23:02:05 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 bool	is_redir(t_token *token)
 {
 	if (!token)
-		return false;
+		return (false);
 	return (token->redir_op_type != REDIR_OP_NONE);
 }
 
- t_ast_node	*create_ast_node(t_token *token)
+t_ast_node	*create_ast_node(t_token *token)
 {
-	t_ast_node *node;
+	t_ast_node	*node;
 
 	node = malloc(sizeof(t_ast_node));
 	if (!node)
@@ -31,6 +31,51 @@ bool	is_redir(t_token *token)
 	node->right = NULL;
 	node->command = NULL;
 	return (node);
+}
+
+bool	append_argument(t_command *cmd, const char *arg)
+{
+	int		count;
+	char	**new_args;
+	int		i;
+
+	count = 0;
+	if (cmd->argument)
+	{
+		while (cmd->argument[count])
+			count++;
+	}
+	new_args = malloc(sizeof(char *) * (count + 2));
+	if (!new_args)
+		return (false);
+	i = -1;
+	while (++i < count)
+		new_args[i] = cmd->argument[i];
+	new_args[count] = ft_strdup(arg);
+	if (!new_args[count])
+		return (free(new_args), false);
+	new_args[count + 1] = NULL;
+	free(cmd->argument);
+	cmd->argument = new_args;
+	return (true);
+}
+
+t_ast_node	*init_command_node(void)
+{
+	t_ast_node	*new_node;
+	t_command	*cmd;
+
+	new_node = create_ast_node(NULL);
+	if (!new_node)
+		return (NULL);
+	cmd = ft_calloc(1, sizeof(t_command));
+	if (!cmd)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->command = cmd;
+	return (new_node);
 }
 /*bool append_argument(t_command *cmd, const char *arg)
 {
@@ -61,114 +106,6 @@ bool	is_redir(t_token *token)
 	cmd->argument = new_args;
 	return (true);
 }*/
-
-//resized to 23 lines 
-bool	append_argument(t_command *cmd, const char *arg)
-{
-	int		count;
-	char	**new_args;
-	int		i;
-
-	count = 0;
-	if (cmd->argument)
-	{
-		while (cmd->argument[count])
-			count++;
-	}
-	new_args = malloc(sizeof(char *) * (count + 2));
-	if (!new_args)
-		return (false);
-	i = -1;
-	while (++i < count)
-		new_args[i] = cmd->argument[i];
-	new_args[count] = ft_strdup(arg);
-	if (!new_args[count])
-		return (free(new_args), false);
-	new_args[count + 1] = NULL;
-	free(cmd->argument);
-	cmd->argument = new_args;
-	return (true);
-}
-
-t_ast_node	*init_command_node(void)
-{
-	t_ast_node *new_node;
-	t_command  *cmd;
-
-	new_node = create_ast_node(NULL);
-	if (!new_node)
-		return (NULL);
-	cmd = ft_calloc(1, sizeof(t_command));
-	if (!cmd)
-	{
-		free(new_node);
-		return (NULL);
-	}
-	new_node->command = cmd;
-	return (new_node);
-}
-
-bool	handle_redirection(t_command *cmd, t_list **current_token)
-{
-	t_token *token;
-	t_redir *new_redir;
-
-	if (!current_token || !*current_token)
-		return (false);
-	token = (t_token *)(*current_token)->content;
-	if (!is_redir(token))
-		return (false);
-	new_redir = init_redirection(token);
-	if (!new_redir)
-		return (false);
-	if (!assign_redirection_filename(new_redir, current_token))
-		return (free(new_redir), false);
-	insert_redirection(cmd, new_redir);
-	*current_token = (*current_token)->next;
-	return (true);
-}
-t_redir	*init_redirection(t_token *token)
-{
-	t_redir *new_redir;
-
-	new_redir = malloc(sizeof(t_redir));
-	if (!new_redir)
-		return (NULL);
-	new_redir->redir_type = token->redir_op_type;
-	new_redir->filename = NULL;
-	new_redir->next = NULL;
-	return (new_redir);
-}
-bool assign_redirection_filename(t_redir *new_redir, t_list **current_token)
-{
-	t_token *token;
-
-	*current_token = (*current_token)->next;
-	if (!*current_token)
-		return (false);
-	token = (t_token *)(*current_token)->content;
-	if (token->token_type != TYPE_WORD)
-		return (false);
-	new_redir->filename = ft_strdup(token->value);
-	if (!new_redir->filename)
-		return (false);
-	return (true);
-}
-void insert_redirection(t_command *cmd, t_redir *new_redir)
-{
-	t_redir *tmp;
-
-	if (!cmd->redir)
-	{
-		cmd->redir = new_redir;
-		return;
-	}
-	tmp = cmd->redir;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new_redir;
-}
-
 /*bool handle_redirection(t_command *cmd, t_list **current_token)
 {
 	t_token *token;
@@ -248,7 +185,6 @@ t_ast_node *ast_command(t_list **current_token)
 	return new_node;
 }*/
 
-
 /*t_ast_node *ast_command(t_list **current_token)
 {
 	t_ast_node *new_node;
@@ -297,8 +233,6 @@ t_ast_node *ast_command(t_list **current_token)
 	return new_node;
 }*/
 
-
-
 /*bool handle_redirection(t_command *cmd, t_list **current_token)
 {
 	t_token *token;
@@ -338,10 +272,7 @@ t_ast_node *ast_command(t_list **current_token)
 	return true;
 }*/
 
-
 // Updated is_redir function to handle your token structure
-
-
 
 /*void print_ast_command(t_ast_node *node)
 {
@@ -368,10 +299,7 @@ t_ast_node *ast_command(t_list **current_token)
 		r = r->next;
 	}
 }*/
-
-
-
- /*t_ast_node *ast_command(t_list **current_token)
+/*t_ast_node *ast_command(t_list **current_token)
 {
 	t_ast_node	*new_node;
 	t_token		*token;
@@ -406,7 +334,6 @@ t_ast_node *ast_command(t_list **current_token)
 	}
 	return (NULL);
 }*/
-
 
 /*t_ast_node *ast_command(t_list **current_token)
 {
@@ -500,7 +427,6 @@ t_ast_node *ast_command(t_list **current_token)
 	return (new_node);
 }*/
 
-
 /*bool append_argument(t_command *cmd, const char *arg)
 {
 	int count = 0;
@@ -518,7 +444,3 @@ t_ast_node *ast_command(t_list **current_token)
 	cmd->argument = new_args;
 	return true;
 }*/
-
-
-
-
