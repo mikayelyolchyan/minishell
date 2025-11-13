@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
+/*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:00:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/15 18:00:59 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:19:04 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
+
+# include "../parser/parser.h"
 
 #endif

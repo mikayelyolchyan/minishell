@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/20 20:51:56 by madlen           ###   ########.fr       */
+/*   Updated: 2025/11/11 20:58:37 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ bool check_subshell_syntax(t_list *current_token)
         {
             print_syntax_error(next->value);
             return false;
-        }
-        
+        } 
 	}
     return true;
 }
@@ -198,6 +197,8 @@ bool chek_here_doc_count(t_list *tokens)
 		return(false);
 	return true;
 }
+
+
 bool syntax_analyze(t_list *tokens)
 {
 	t_token *current_token;
