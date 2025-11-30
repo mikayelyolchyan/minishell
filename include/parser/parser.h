@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/24 23:07:08 by madlen           ###   ########.fr       */
+/*   Updated: 2025/11/30 17:57:02 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PARSER_H
 
 # include "../lexer/lexer.h"
+# include "../../lib/libft/libft.h"
+
 
 typedef struct s_ast_node
 {
@@ -28,14 +30,18 @@ typedef struct s_redir
 	char						*filename;
 	t_redirection_operator_type	redir_type;
 	struct s_redir				*next;	
+	int in_fd;
+	int out_fd;
 }	t_redir;
 
 typedef struct s_command
 {
 	char			**argument;
 	struct s_redir	*redir;
-
 }	t_command ;
+
+//from executer.h 
+typedef struct s_shell t_shell;
 
 void	print_syntax_error(char *token_value);
 int	subshell_open_count(t_list *tokens);
@@ -50,7 +56,7 @@ bool check_token_syntax( t_list *current_token);
 
 bool check_operator_combinations_for_redirection(t_list *tokens);
 
-bool	parsing(t_list *tokens);
+bool	parsing(t_list *tokens, t_shell *shell);
 bool	syntax_analyze(t_list *tokens);
 
 bool is_redir(t_token *token);

@@ -6,11 +6,12 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:58:28 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/24 23:00:56 by madlen           ###   ########.fr       */
+/*   Updated: 2025/11/30 18:08:13 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parser/parser.h"
+#include "../../include/executor/executor.h"
 
 /*bool	parsing(t_list *tokens)
 {
@@ -21,10 +22,11 @@
 	return (true);
 }*/
 
-bool	parsing(t_list *tokens)
+bool	parsing(t_list *tokens, t_shell *shell)
 {
     t_ast_node	*ast;
-
+	
+	(void)shell;
     if (!tokens)
         return (false);
     if (!syntax_analyze(tokens))
@@ -35,7 +37,8 @@ bool	parsing(t_list *tokens)
         fprintf(stderr, "AST build failed\n");
         return false;
     }
-    print_ast(ast);
+	//print_ast(ast);
+	execute_ast(ast, shell);
     free_ast(ast);
     return true;
 }

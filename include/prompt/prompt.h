@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
+/*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:10 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/08/20 20:20:07 by miyolchy         ###   ########.fr       */
+/*   Updated: 2025/11/29 08:59:03 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-void	get_prompt_line(void);
+# include  "../executor/executor.h"
+void	get_prompt_line(t_shell *shell);
 
 #endif

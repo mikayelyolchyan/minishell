@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:55 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/09/24 17:24:41 by madlen           ###   ########.fr       */
+/*   Updated: 2025/11/30 18:09:21 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 #include "../../include/prompt/prompt.h"
 #include "../../include/lexer/lexer.h"
 #include "../../include/parser/parser.h"
+#include "../../include/executor/executor.h"
 
 /*void		print_tokens(t_list *tokens);
 
@@ -93,11 +94,12 @@ void	get_prompt_line(void)
 
 void		print_tokens(t_list *tokens);
 
-void	get_prompt_line(void)
+void	get_prompt_line(t_shell *shell)
 {
 	char		*line;
 	t_list		*tokens;
 
+	(void)shell;
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -112,8 +114,8 @@ void	get_prompt_line(void)
 		}
 		else if (tokens != NULL)
 		{
-			parsing(tokens);
-			print_tokens(tokens);
+			parsing(tokens, shell);
+			//print_tokens(tokens);
 		}
 		ft_lstclear(&tokens, del_token);
 		free(line);

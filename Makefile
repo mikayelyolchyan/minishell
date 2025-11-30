@@ -8,6 +8,7 @@ LEXER_DIR = src/lexer/
 PARSER_DIR = src/parser/
 PROMPT_DIR = src/prompt/
 HEADERS_DIR = include/
+EXECUTOR_DIR = src/executor/
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
 BIN_DIR = bin
@@ -30,6 +31,8 @@ SRCS = \
 	$(PARSER_DIR)ast_free.c\
 	$(PARSER_DIR)ast_redir.c\
 	$(PARSER_DIR)print_ast.c\
+	$(EXECUTOR_DIR)executor.c\
+	$(EXECUTOR_DIR)ast_interpretor.c\
     tests/lexer/print_tokens.c \
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
