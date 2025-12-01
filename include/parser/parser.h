@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/11/30 17:57:02 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/01 03:16:33 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_redir
 	struct s_redir				*next;	
 	int in_fd;
 	int out_fd;
+	char       *heredoc_tmpfile;
 }	t_redir;
 
 typedef struct s_command

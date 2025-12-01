@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:00:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/11/30 17:13:56 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/01 03:44:40 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	ft_strcmp(const char *s1, const char *s2);
 void free_arr(char **arr);
 int     execute_builtin(t_ast_node *node, t_shell *shell);
 void    execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell);
-bool    handle_cmd_redir(t_ast_node *ast, t_shell *shell);
+//int    handle_cmd_redir(t_ast_node *ast, t_shell *shell);
+int handle_single_redir(t_redir *r);
+int apply_redir(t_ast_node *cmd_node);
 
 #endif

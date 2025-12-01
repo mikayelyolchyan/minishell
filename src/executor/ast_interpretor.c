@@ -6,11 +6,12 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:41:22 by madlen            #+#    #+#             */
-/*   Updated: 2025/11/30 18:36:33 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/01 04:10:26 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/executor/executor.h"
+#include <fcntl.h>
 
 /*
 Simple commands → execute immediately
@@ -133,7 +134,7 @@ char	**ft_split_2(char *s, char c)
 	return (res);
 }*/
 #include <stddef.h>
-
+//---------------------------------------cmd---------------------------------------
 void free_arr(char **arr)
 {
     int i = 0;
@@ -199,12 +200,19 @@ char *find_path(t_env *env_list)
 {
     t_env *current = env_list;
 
-    while (current && current->next != NULL)
+    /*while (current && current->next != NULL)
+    {
+        if (ft_strcmp(current->name, "PATH") == 0)
+            return (current->value);
+        current = current->next;
+    }*/
+   while (current) // to doI get seg like this 
     {
         if (ft_strcmp(current->name, "PATH") == 0)
             return (current->value);
         current = current->next;
     }
+	
     return (NULL);
 }
 /*void print_2d_array(char **array, int size) {
@@ -237,7 +245,7 @@ char *find_cmd_path(char *cmd_name, t_env *env_list)
         return (full_path);
 	}
 	path_value = find_path(env_list);
-	printf("PATH value: %s\n", path_value);
+	//printf("PATH value: %s\n", path_value);
 	if (!path_value || !path_value[0])
 		return (NULL); // add error message ? "command not found "
 	paths =  ft_split(path_value, ':');
@@ -271,7 +279,7 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 		write(1, "cmd_node->command == NULL\n", 22);
 		return (1); // add error message ? 
 	}
-	printf("cmd_node %s\n", cmd_node->command->argument[0]);
+	//printf("cmd_node %s\n", cmd_node->command->argument[0]);
 	if(is_bulit_in_cmd(cmd_node) == true)
 		//return(execute_builtin(cmd_node, shell));
 		return (fprintf(stderr, "Builtin execution not implemented\n"), 1);
@@ -279,7 +287,7 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 	{
 		//printf("%s is not a built-in command\n", cmd_node->command->argument[0]);
 		cmd_path = find_cmd_path(cmd_node->command->argument[0], shell->env_list);
-		printf("cmd_path: %s\n", cmd_path);
+		//printf("cmd_path: %s\n", cmd_path);
 		if(!cmd_path)
 		{
 			shell->last_exit_status = 127;
@@ -311,26 +319,128 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 	return (shell->last_exit_status);
 }
 
-/*bool handle_cmd_redir(t_ast_node *ast, t_shell *shell)
-{
-}*/
-
 
 void execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell)
 {
 	//handle redirs
-	/*if (cmd_node->command->redir)
+	if (cmd_node->command->redir)
 	{
-		if(!handle_cmd_redir(cmd_node, shell))
+		if(!apply_redir(cmd_node))
 		{
 			free(cmd_path);
 			exit(1); // add error message ?
 		}
-	}*/
+	}
 
 	execve(cmd_path, cmd_node->command->argument, shell->env_array);
 	free(cmd_path);
 	exit(127); // add error message ?	
+}
+//---------------------redir--------------------------
+
+/*int handle_cmd_redir(t_ast_node *cmd_node, t_shell *shell)
+{
+	if(cmd_node->command->redir->redir_type == REDIR_OP_IN \
+	|| cmd_node->command->redir->redir_type == REDIR_OP_HERE_DOC)
+		return(set_in_fd(cmd_node, shell));
+	else if(cmd_node->command->redir->redir_type == REDIR_OP_OUT \
+	|| cmd_node->command->redir->redir_type == REDIR_OP_APPEND)
+		return(set_out_fd(cmd_node, shell));
+	return (0);
+}*/
+int apply_redir(t_ast_node *cmd_node)
+{
+    t_redir *redir = cmd_node->command->redir;
+
+    while (redir)
+    {
+        if (!handle_single_redir(redir))
+            return (0);
+        redir = redir->next;
+    }
+    return (1);
+}
+/*int set_in_fd(t_ast_node *cmd_node , t_shell *t_shell)
+{
+	int fd;
+	if(cmd_node->command->redir->redir_type == REDIR_OP_IN)
+	{
+		fd = open(cmd_node->command->redir->filename, O_RDONLY);
+		
+		cmd_node->command->redir->in_fd = fd;	
+	}
+	if(cmd_node->command->redir->redir_type == REDIR_OP_HERE_DOC)
+	{
+		fd = handle_heredock(cmd_node->command->redir->filename);
+		fd = open(fd, O_RDONLY);
+		if (fd == -1)
+		{
+    		perror("minishell"); // to do error massage idk 
+    		return (0);
+		}		
+		// Do I need to close it here ? 
+	}
+		if(cmd_node->command->redir->in_fd  != STDIN_FILENO && fd != -1)
+			dup2(cmd_node->command->redir->in_fd, STDIN_FILENO);
+		else
+		// I dont knpow what shoild happen here 
+	return(0);
+}
+
+
+int set_out_fd(t_ast_node *cmd_node, t_shell *shell)
+{
+	int fd;
+	if(cmd_node->command->redir->redir_type == REDIR_OP_APPEND)
+	{
+		fd = open(cmd_node->command->redir->filename, O_WRONLY | O_CREAT | O_APPEND , 0644);
+		if (fd == -1)
+		{
+    		perror("minishell"); // to do error massage idk 
+    		return (0);
+		}		
+		cmd_node->command->redir->out_fd = fd;
+	}
+	if(cmd_node->command->redir->redir_type == REDIR_OP_OUT)
+	{
+		fd = handle_heredock(cmd_node->command->redir->filename);
+		fd = open(cmd_node->command->redir->filename,O_WRONLY | O_CREAT | O_TRUNC , 0644);
+		if(fd == -1)
+		{
+			return(close(fd), 0);// I nned to do something here 
+		}
+		cmd_node->command->redir->out_fd = fd;
+		// Do I need to close it here ? 
+	}
+	if(cmd_node->command->redir->out_fd  != STDOUT_FILENO && fd != -1)
+			dup2(cmd_node->command->redir->out_fd, STDOUT_FILENO);
+		else
+		// I dont knpow what shoild happen here 
+	return(0);
+}*/
+
+int handle_single_redir(t_redir *r)
+{
+    int fd;
+    if (r->redir_type == REDIR_OP_IN || r->redir_type == REDIR_OP_HERE_DOC)
+        fd = open(r->filename, O_RDONLY);
+    else if (r->redir_type == REDIR_OP_OUT)
+        fd = open(r->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    else if (r->redir_type == REDIR_OP_APPEND)
+        fd = open(r->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (fd < 0)
+        return (perror("minishell"), 0); // to do idk what error or exit status haha 
+    if (r->redir_type == REDIR_OP_IN || r->redir_type == REDIR_OP_HERE_DOC)
+    {
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+    }
+    else
+    {
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
+    return (1);
 }
 
 /*
