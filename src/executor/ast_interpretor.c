@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:41:22 by madlen            #+#    #+#             */
-/*   Updated: 2025/12/01 04:10:26 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/01 10:04:27 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,7 +325,7 @@ void execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell)
 	//handle redirs
 	if (cmd_node->command->redir)
 	{
-		if(!apply_redir(cmd_node))
+		if(!apply_redir(cmd_node, shell))
 		{
 			free(cmd_path);
 			exit(1); // add error message ?
@@ -348,13 +348,13 @@ void execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell)
 		return(set_out_fd(cmd_node, shell));
 	return (0);
 }*/
-int apply_redir(t_ast_node *cmd_node)
+int apply_redir(t_ast_node *cmd_node, t_shell *shell)
 {
     t_redir *redir = cmd_node->command->redir;
 
     while (redir)
     {
-        if (!handle_single_redir(redir))
+        if (!handle_single_redir(redir, shell))
             return (0);
         redir = redir->next;
     }
@@ -419,7 +419,7 @@ int set_out_fd(t_ast_node *cmd_node, t_shell *shell)
 	return(0);
 }*/
 
-int handle_single_redir(t_redir *r)
+int handle_single_redir(t_redir *r, t_shell *shell)
 {
     int fd;
     if (r->redir_type == REDIR_OP_IN || r->redir_type == REDIR_OP_HERE_DOC)
@@ -428,17 +428,31 @@ int handle_single_redir(t_redir *r)
         fd = open(r->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     else if (r->redir_type == REDIR_OP_APPEND)
         fd = open(r->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fd < 0)
-        return (perror("minishell"), 0); // to do idk what error or exit status haha 
+     if (fd < 0)
+    {
+        perror("minishell");
+        shell->last_exit_status = 1;
+        return 0;
+    }// to do idk what error or exit status haha 
     if (r->redir_type == REDIR_OP_IN || r->redir_type == REDIR_OP_HERE_DOC)
     {
-        dup2(fd, STDIN_FILENO);
-        close(fd);
+        if (dup2(fd, STDIN_FILENO) < 0)
+        {
+            perror("minishell");
+            close(fd);
+            shell->last_exit_status = 1;
+            return 0;
+        }
     }
     else
     {
-        dup2(fd, STDOUT_FILENO);
-        close(fd);
+        if (dup2(fd, STDOUT_FILENO) < 0)
+        {
+            perror("minishell");
+            close(fd);
+            shell->last_exit_status = 1;
+            return 0;
+        }
     }
     return (1);
 }
