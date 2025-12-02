@@ -68,7 +68,6 @@ bool make_heredoc(t_redir *redir , t_shell *shell)
 	exit(0);
 }*/
 
-int	ft_strcmp(const char *s1, const char *s2);
 char *generate_heredoc_filename(int index)
 {
     char *index_str;
@@ -138,7 +137,7 @@ bool make_heredoc(t_redir *redir, t_shell *shell, int heredoc_index)
             print_heredoc_warning(delimiter);
             break;
         }
-        if (ft_strcmp(delimiter, line) == 0)
+        if (ft_strncmp(delimiter, line, ft_strlen(delimiter) + 1) == 0)
         {
             free(line);
             break;

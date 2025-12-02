@@ -50,12 +50,12 @@ char **split_env_value(char *env_value);
 char *find_cmd_path(char *cmd_name, t_env *env_list);
 int execute_command(t_ast_node *ast, t_shell *shell);
 void execute_command_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell);
-int	ft_strcmp(const char *s1, const char *s2);
 void free_arr(char **arr);
 int     execute_builtin(t_ast_node *node, t_shell *shell);
 void    execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell);
 //int    handle_cmd_redir(t_ast_node *ast, t_shell *shell);
 int handle_single_redir(t_redir *r, t_shell *shell);
 int apply_redir(t_ast_node *cmd_node, t_shell *shell);
+int execute_pipe(t_ast_node *ast, t_shell *shell);
 
 #endif

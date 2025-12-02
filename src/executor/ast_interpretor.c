@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/executor/executor.h"
+#include "../../include/builtins/builtins.h"
 #include <fcntl.h>
 
 
@@ -29,16 +30,6 @@ void free_arr(char **arr)
     free(arr);
 }
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
 // Sofis split end
 
 bool is_bulit_in_cmd(t_ast_node *cmd_node)
@@ -52,19 +43,19 @@ bool is_bulit_in_cmd(t_ast_node *cmd_node)
 	if (!cmd)
 		return (false);
 	
-	if (ft_strcmp(cmd, "cd") == 0)
+	if (ft_strncmp(cmd, "cd", 2) == 0 && cmd[2] == '\0')
 		return (true);
-	else if (ft_strcmp(cmd, "echo") == 0)
+	else if (ft_strncmp(cmd, "echo", 4) == 0 && cmd[4] == '\0')
 		return (true);
-	else if (ft_strcmp(cmd, "env") == 0)
+	else if (ft_strncmp(cmd, "env", 3) == 0 && cmd[3] == '\0')
 		return (true);
-	else if (ft_strcmp(cmd, "exit") == 0)
+	else if (ft_strncmp(cmd, "exit", 4) == 0 && cmd[4] == '\0')
 		return (true);
-	else if (ft_strcmp(cmd, "export") == 0)
+	else if (ft_strncmp(cmd, "export", 6) == 0 && cmd[6] == '\0')
 		return (true);
-	else if (ft_strcmp(cmd, "pwd") == 0)
+	else if (ft_strncmp(cmd, "pwd", 3) == 0 && cmd[3] == '\0')
 		return (true);
-	else if (ft_strcmp(cmd, "unset") == 0)
+	else if (ft_strncmp(cmd, "unset", 5) == 0 && cmd[5] == '\0')
 		return (true);
 	return (false);
 }
@@ -89,13 +80,13 @@ char *find_path(t_env *env_list)
 
     /*while (current && current->next != NULL)
     {
-        if (ft_strcmp(current->name, "PATH") == 0)
+        if (ft_strncmp(current->name, "PATH", 4) == 0 && current->name[4] == '\0')
             return (current->value);
         current = current->next;
     }*/
    while (current) // to doI get seg like this 
     {
-        if (ft_strcmp(current->name, "PATH") == 0)
+        if (ft_strncmp(current->name, "PATH", 4) == 0 && current->name[4] == '\0')
             return (current->value);
         current = current->next;
     }
@@ -172,8 +163,7 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 		return (1);
 	
 	if(is_bulit_in_cmd(cmd_node) == true)
-		//return(execute_builtin(cmd_node, shell));
-		return (fprintf(stderr, "Builtin execution not implemented\n"), 1);
+		return(execute_builtin(cmd_node, shell));
 	else
 	{
 		cmd_path = find_cmd_path(cmd_node->command->argument[0], shell->env_list);
@@ -354,10 +344,75 @@ Waits for both children to complete
 Returns exit status of the last command
 */
 
-/*bool execute_pipe(t_ast_node *ast, t_shell *shell)
+int	execute_pipe(t_ast_node *ast, t_shell *shell)
 {
-	
-}*/
+	int		pipefd[2];
+	pid_t	pid_left;
+	pid_t	pid_right;
+	int		status;
+	int		exit_code;
+
+	if (pipe(pipefd) == -1)
+	{
+		perror("minishell: pipe");
+		return (1);
+	}
+	pid_left = fork();
+	if (pid_left == -1)
+	{
+		perror("minishell: fork");
+		close(pipefd[0]);
+		close(pipefd[1]);
+		return (1);
+	}
+	if (pid_left == 0)
+	{
+		close(pipefd[0]);
+		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		{
+			perror("minishell: dup2");
+			exit(1);
+		}
+		close(pipefd[1]);
+		if (ast->left->command)
+			exit(execute_command(ast->left, shell));
+		else
+			exit(execute_pipe(ast->left, shell));
+	}
+	pid_right = fork();
+	if (pid_right == -1)
+	{
+		perror("minishell: fork");
+		close(pipefd[0]);
+		close(pipefd[1]);
+		waitpid(pid_left, NULL, 0);
+		return (1);
+	}
+	if (pid_right == 0)
+	{
+		close(pipefd[1]);
+		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		{
+			perror("minishell: dup2");
+			exit(1);
+		}
+		close(pipefd[0]);
+		if (ast->right->command)
+			exit(execute_command(ast->right, shell));
+		else
+			exit(execute_pipe(ast->right, shell));
+	}
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid_left, &status, 0);
+	waitpid(pid_right, &status, 0);
+	if (WIFEXITED(status))
+		exit_code = WEXITSTATUS(status);
+	else
+		exit_code = 1;
+	shell->last_exit_status = exit_code;
+	return (exit_code);
+}
 
 /*&&: only execute right side if left succeeded (exit code 0)
 ||: only execute right side if left failed (exit code != 0)

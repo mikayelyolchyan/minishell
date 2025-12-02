@@ -2,3 +2,5 @@
 *.a
 minishell
 .vscode
+*.md
+*.sh

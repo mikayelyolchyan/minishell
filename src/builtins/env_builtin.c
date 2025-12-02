@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyolchy <miyolchy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,19 +12,23 @@
 
 #include "../../include/builtins/builtins.h"
 #include <unistd.h>
-#include <stdio.h>
 
-int	builtin_pwd(void)
+int	builtin_env(t_shell *shell)
 {
-	char	*cwd;
+	t_env	*current;
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-	{
-		perror("minishell: pwd");
+	if (!shell || !shell->env_list)
 		return (1);
+	current = shell->env_list;
+	while (current)
+	{
+		if (current->value)
+		{
+			ft_putstr_fd(current->name, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putendl_fd(current->value, STDOUT_FILENO);
+		}
+		current = current->next;
 	}
-	ft_putendl_fd(cwd, STDOUT_FILENO);
-	free(cwd);
 	return (0);
 }

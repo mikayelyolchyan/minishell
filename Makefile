@@ -9,6 +9,7 @@ PARSER_DIR = src/parser/
 PROMPT_DIR = src/prompt/
 HEADERS_DIR = include/
 EXECUTOR_DIR = src/executor/
+BUILTINS_DIR = src/builtins/
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
 BIN_DIR = bin
@@ -34,6 +35,16 @@ SRCS = \
 	$(PARSER_DIR)heredoc.c\
 	$(EXECUTOR_DIR)executor.c\
 	$(EXECUTOR_DIR)ast_interpretor.c\
+	$(BUILTINS_DIR)builtins.c\
+	$(BUILTINS_DIR)echo.c\
+	$(BUILTINS_DIR)pwd.c\
+	$(BUILTINS_DIR)cd.c\
+	$(BUILTINS_DIR)env_builtin.c\
+	$(BUILTINS_DIR)exit.c\
+	$(BUILTINS_DIR)export.c\
+	$(BUILTINS_DIR)export_utils.c\
+	$(BUILTINS_DIR)export_print.c\
+	$(BUILTINS_DIR)unset.c\
     tests/lexer/print_tokens.c \
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
