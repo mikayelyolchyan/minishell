@@ -13,6 +13,7 @@
 //#include "minishell.h"
 #include "../include/executor/executor.h"
 #include "../include/prompt/prompt.h"
+#include "../include/signals/signals.h"
 #include "../lib/libft/libft.h"
 
 void init_shell(t_shell *shell, t_env *env_list)
@@ -128,6 +129,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	env_list = get_env_list(envp);
 	init_shell(&shell, env_list);
+	setup_signals_interactive();
 	//print_env_list(shell.env_list);
 	get_prompt_line(&shell);
 	return (0);

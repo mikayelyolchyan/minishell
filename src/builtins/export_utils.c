@@ -80,7 +80,10 @@ int	update_or_add_env_var(t_shell *shell, char *name, char *value)
 	if (!new_var)
 		return (1);
 	new_var->name = ft_strdup(name);
-	new_var->value = value ? ft_strdup(value) : NULL;
+	if (value)
+		new_var->value = ft_strdup(value);
+	else
+		new_var->value = NULL;
 	new_var->next = NULL;
 	append_node_env(&shell->env_list, new_var);
 	return (0);

@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
-#include <unistd.h>
-#include <stdio.h>
 
 static char	*get_home_dir(t_shell *shell)
 {

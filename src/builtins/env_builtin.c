@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
-#include <unistd.h>
 
 int	builtin_env(t_shell *shell)
 {

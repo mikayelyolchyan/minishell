@@ -13,6 +13,7 @@
 #ifndef EXPANSION_H
 # define EXPANSION_H
 
+# include <stdlib.h>
 # include "../executor/executor.h"
 # include "../parser/parser.h"
 # include "../../lib/libft/libft.h"

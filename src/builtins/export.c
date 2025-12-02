@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
-#include <unistd.h>
 
 static void	print_export_error(char *arg)
 {
@@ -20,11 +19,27 @@ static void	print_export_error(char *arg)
 	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
 }
 
+static int	validate_and_update(t_shell *shell, char *name,
+	char *value, char *equals)
+{
+	if (!is_valid_identifier(name))
+	{
+		if (equals)
+			free(name);
+		return (1);
+	}
+	update_or_add_env_var(shell, name, value);
+	if (equals)
+		free(name);
+	return (0);
+}
+
 static int	process_export_arg(t_shell *shell, char *arg)
 {
 	char	*equals;
 	char	*name;
 	char	*value;
+	int		result;
 
 	equals = find_equals_sign(arg);
 	if (!equals)
@@ -37,17 +52,10 @@ static int	process_export_arg(t_shell *shell, char *arg)
 		name = ft_substr(arg, 0, equals - arg);
 		value = equals + 1;
 	}
-	if (!is_valid_identifier(name))
-	{
+	result = validate_and_update(shell, name, value, equals);
+	if (result != 0)
 		print_export_error(arg);
-		if (equals)
-			free(name);
-		return (1);
-	}
-	update_or_add_env_var(shell, name, value);
-	if (equals)
-		free(name);
-	return (0);
+	return (result);
 }
 
 int	builtin_export(char **args, t_shell *shell)

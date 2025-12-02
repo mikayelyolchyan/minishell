@@ -13,6 +13,8 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
+# include <unistd.h>
+# include <stdio.h>
 # include "../executor/executor.h"
 
 int		execute_builtin(t_ast_node *node, t_shell *shell);

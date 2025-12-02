@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
-#include <unistd.h>
 
 static int	check_n_flag(char *str)
 {

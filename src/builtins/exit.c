@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
-#include <unistd.h>
 
 static int	is_numeric(char *str)
 {

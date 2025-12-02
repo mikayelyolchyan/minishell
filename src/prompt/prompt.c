@@ -35,6 +35,7 @@
 #include "../../include/lexer/lexer.h"
 #include "../../include/parser/parser.h"
 #include "../../include/executor/executor.h"
+#include "../../include/signals/signals.h"
 
 /*void		print_tokens(t_list *tokens);
 
@@ -104,18 +105,26 @@ void	get_prompt_line(t_shell *shell)
 	{
 		line = readline("minishell$ ");
 		if (!line)
+		{
+			write(1, "exit\n", 5);
 			break ;
+		}
+		if (g_signal == SIGINT)
+		{
+			shell->last_exit_status = 130;
+			g_signal = 0;
+		}
 		if (line[0] != '\0')
 			add_history(line);
 		tokens = lexical_analyze(line);
 		if (tokens == NULL)
 		{
+			free(line);
 			continue ;
 		}
 		else if (tokens != NULL)
 		{
 			parsing(tokens, shell);
-			//print_tokens(tokens);
 		}
 		ft_lstclear(&tokens, del_token);
 		free(line);

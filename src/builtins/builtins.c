@@ -42,8 +42,8 @@
 
 #include "../../include/builtins/builtins.h"
 
-static int	execute_builtin_cd_pwd(char *cmd, t_ast_node *node, \
-									t_shell *shell)
+static int	execute_builtin_cd_pwd(char *cmd, t_ast_node *node,
+	t_shell *shell)
 {
 	if (ft_strncmp(cmd, "cd", 2) == 0 && cmd[2] == '\0')
 		return (builtin_cd(node->command->argument, shell));
@@ -52,8 +52,8 @@ static int	execute_builtin_cd_pwd(char *cmd, t_ast_node *node, \
 	return (-1);
 }
 
-static int	execute_builtin_env_export(char *cmd, t_ast_node *node, \
-											t_shell *shell)
+static int	execute_builtin_env_export(char *cmd, t_ast_node *node,
+	t_shell *shell)
 {
 	if (ft_strncmp(cmd, "env", 3) == 0 && cmd[3] == '\0')
 		return (builtin_env(shell));

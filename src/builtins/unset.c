@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
-#include <unistd.h>
 
 static void	free_env_node(t_env *node)
 {
@@ -22,6 +21,15 @@ static void	free_env_node(t_env *node)
 	if (node->value)
 		free(node->value);
 	free(node);
+}
+
+static void	remove_env_from_list(t_shell *shell, t_env *current, t_env *prev)
+{
+	if (prev)
+		prev->next = current->next;
+	else
+		shell->env_list = current->next;
+	free_env_node(current);
 }
 
 static int	unset_variable(t_shell *shell, char *name)
@@ -44,14 +52,7 @@ static int	unset_variable(t_shell *shell, char *name)
 	{
 		if (ft_strncmp(current->name, name, name_len) == 0
 			&& current->name[name_len] == '\0')
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				shell->env_list = current->next;
-			free_env_node(current);
-			return (0);
-		}
+			return (remove_env_from_list(shell, current, prev), 0);
 		prev = current;
 		current = current->next;
 	}

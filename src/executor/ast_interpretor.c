@@ -12,6 +12,7 @@
 
 #include "../../include/executor/executor.h"
 #include "../../include/builtins/builtins.h"
+#include "../../include/signals/signals.h"
 #include <fcntl.h>
 
 
@@ -185,7 +186,10 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 		else // parent
 		{
 			waitpid(pid,&status, 0);
-			shell->last_exit_status = 0;
+			if (WIFEXITED(status))
+				shell->last_exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				shell->last_exit_status = 128 + WTERMSIG(status);
 			free(cmd_path);
 		}
 	}
@@ -195,19 +199,19 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 
 void execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell)
 {
-	//handle redirs
+	setup_signals_child();
 	if (cmd_node->command->redir)
 	{
 		if(!apply_redir(cmd_node, shell))
 		{
 			free(cmd_path);
-			exit(1); // add error message ?
+			exit(1);
 		}
 	}
 
 	execve(cmd_path, cmd_node->command->argument, shell->env_array);
 	free(cmd_path);
-	exit(127); // add error message ?	
+	exit(127);
 }
 //---------------------redir--------------------------
 

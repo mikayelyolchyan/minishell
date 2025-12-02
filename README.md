@@ -1,6 +1,6 @@
 # minishell
 
-**42 School Project** | **Status:** 🚧 In Progress (70%)
+**42 School Project** | **Status:** 🚧 In Progress (75%)
 
 ## 📖 Документация
 
@@ -25,8 +25,8 @@ make fclean
 - ✅ Parser (100%)
 - ✅ Built-in Commands (100%)
 - ✅ Variable Expansion (100%)
+- ✅ Signals (100%)
 - 🚧 Executor (60%)
-- ❌ Signals (0%)
 - ❌ Redirections (20%)
 - ❌ Pipes (20%)
 

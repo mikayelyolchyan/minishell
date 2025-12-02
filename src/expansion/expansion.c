@@ -12,7 +12,6 @@
 
 #include "../../include/expansion/expansion.h"
 #include "../../include/env/env.h"
-#include <stdlib.h>
 
 static char	*get_var_value(char *var_name, t_shell *shell)
 {

@@ -11,6 +11,7 @@ HEADERS_DIR = include/
 EXECUTOR_DIR = src/executor/
 BUILTINS_DIR = src/builtins/
 EXPANSION_DIR = src/expansion/
+SIGNALS_DIR = src/signals/
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
 BIN_DIR = bin
@@ -48,6 +49,7 @@ SRCS = \
 	$(BUILTINS_DIR)unset.c\
 	$(EXPANSION_DIR)expansion.c\
 	$(EXPANSION_DIR)expansion_utils.c\
+	$(SIGNALS_DIR)signals.c\
     tests/lexer/print_tokens.c \
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)

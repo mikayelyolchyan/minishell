@@ -12,7 +12,6 @@
 
 #include "../../include/expansion/expansion.h"
 #include "../../include/parser/parser.h"
-#include <stdlib.h>
 
 char	*join_and_free(char *s1, char *s2)
 {
