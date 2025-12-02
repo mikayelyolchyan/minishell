@@ -12,6 +12,7 @@
 
 #include "../../include/parser/parser.h"
 #include "../../include/executor/executor.h"
+#include "../../include/expansion/expansion.h"
 
 /*bool	parsing(t_list *tokens)
 {
@@ -42,6 +43,7 @@ bool	parsing(t_list *tokens, t_shell *shell)
         free_ast(ast);
         return false;   // to do add an error handeling heredoc cancelled or failed
     }
+	expand_ast_node(ast, shell);
 	//print_ast(ast);
 	execute_ast(ast, shell);
     free_ast(ast);
