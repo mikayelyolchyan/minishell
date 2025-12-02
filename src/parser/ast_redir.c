@@ -41,7 +41,10 @@ t_redir	*init_redirection(t_token *token)
 		return (NULL);
 	new_redir->redir_type = token->redir_op_type;
 	new_redir->filename = NULL;
+	new_redir->heredoc_tmpfile = NULL;
 	new_redir->next = NULL;
+	new_redir->in_fd = -1;
+	new_redir->out_fd = -1;
 	return (new_redir);
 }
 

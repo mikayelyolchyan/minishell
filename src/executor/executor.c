@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:23 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/12/01 03:41:03 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/01 22:11:06 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,13 @@ bool execute_ast(t_ast_node *ast, t_shell *shell)
 {
 	if(!ast)
 		return (false);
+		
+	/*if (!prepare_heredocs(ast, shell))
+    {
+        free_ast(ast);
+        return false;   // to do add an error  heredoc cancelled or failed
+    }*/
+   
 	if(ast->command)
 	{
 		return(execute_command(ast, shell));

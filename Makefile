@@ -31,6 +31,7 @@ SRCS = \
 	$(PARSER_DIR)ast_free.c\
 	$(PARSER_DIR)ast_redir.c\
 	$(PARSER_DIR)print_ast.c\
+	$(PARSER_DIR)heredoc.c\
 	$(EXECUTOR_DIR)executor.c\
 	$(EXECUTOR_DIR)ast_interpretor.c\
     tests/lexer/print_tokens.c \

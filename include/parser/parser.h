@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:01:07 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/12/01 03:16:33 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/01 22:09:28 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ typedef struct s_ast_node
 typedef struct s_redir
 {
 	char						*filename;
+	char *deliminator;
 	t_redirection_operator_type	redir_type;
 	struct s_redir				*next;	
 	int in_fd;
 	int out_fd;
-	char       *heredoc_tmpfile;
+	char *heredoc_tmpfile;
 }	t_redir;
 
 typedef struct s_command
@@ -86,4 +87,14 @@ bool handle_redirection(t_command *cmd, t_list **current_token);
 t_redir *init_redirection(t_token *token);
 bool assign_redirection_filename(t_redir *new_redir, t_list **current_token);
 void insert_redirection(t_command *cmd, t_redir *new_redir);
+/* heredoc processing: prepare heredocs before execution */
+bool prepare_heredocs(t_ast_node *node, t_shell *shell);
+bool prepare_heredocs_recursive(t_ast_node *node, t_shell *shell, 
+                                        int *heredoc_index);
+bool apply_heredoc(t_command *cmd, t_shell *shell, int *heredoc_index);
+bool make_heredoc(t_redir *redir, t_shell *shell, int heredoc_index);
+ bool write_line_to_file(int fd, const char *line);
+void print_heredoc_warning(const char *delimiter);
+char *generate_heredoc_filename(int index);
+
 #endif

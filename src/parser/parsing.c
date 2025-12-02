@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:58:28 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/11/30 18:08:13 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/02 11:30:54 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ bool	parsing(t_list *tokens, t_shell *shell)
     {
         fprintf(stderr, "AST build failed\n");
         return false;
+    }
+	if (!prepare_heredocs(ast, shell))
+    {
+        free_ast(ast);
+        return false;   // to do add an error handeling heredoc cancelled or failed
     }
 	//print_ast(ast);
 	execute_ast(ast, shell);

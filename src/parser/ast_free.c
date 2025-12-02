@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 22:27:11 by madlen            #+#    #+#             */
-/*   Updated: 2025/09/24 23:03:28 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/02 11:42:37 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	free_redir_list(t_redir *redir)
 	while (redir)
 	{
 		tmp = redir->next;
+		if (redir->heredoc_tmpfile)
+		{
+			unlink(redir->heredoc_tmpfile);
+			free(redir->heredoc_tmpfile);
+		}
 		free(redir->filename);
 		free(redir);
 		redir = tmp;
