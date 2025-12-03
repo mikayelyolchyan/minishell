@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:00:58 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/12/01 10:04:05 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/03 17:43:34 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,8 @@ void    execute_cmd_child(t_ast_node *cmd_node, char *cmd_path, t_shell *shell);
 int handle_single_redir(t_redir *r, t_shell *shell);
 int apply_redir(t_ast_node *cmd_node, t_shell *shell);
 int execute_pipe(t_ast_node *ast, t_shell *shell);
+bool execute_and(t_ast_node *ast, t_shell *shell);
+bool execute_or(t_ast_node *ast, t_shell *shell);
+bool execute_subshell(t_ast_node *ast, t_shell *shell);
 
 #endif

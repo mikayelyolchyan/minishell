@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:41:22 by madlen            #+#    #+#             */
-/*   Updated: 2025/12/02 12:55:32 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/03 20:15:45 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char *find_cmd_path(char *cmd_name, t_env *env_list)
 	path_value = find_path(env_list);
 	//printf("PATH value: %s\n", path_value);
 	if (!path_value || !path_value[0])
-		return (NULL); // add error message ? "command not found "
+		return (perror("mishka : command not found"), NULL); // add error: message ? "command not found "
 	paths =  ft_split(path_value, ':');
 	//print_2d_array(paths, 14); // Debug print
 	if (!paths)
@@ -152,6 +152,7 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 	pid_t	pid;
 	t_ast_node *cmd_node;
 	int status;
+	 
 	
 	cmd_node = ast;
 	
@@ -159,9 +160,11 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 	if (!cmd_node)
 		return (1);
 	if (!cmd_node->command)
+	{
 		return (1);
+	}
 	if (!cmd_node->command->argument || !cmd_node->command->argument[0])
-		return (1);
+	return (1);
 	
 	if(is_bulit_in_cmd(cmd_node) == true)
 		return(execute_builtin(cmd_node, shell));
@@ -170,9 +173,10 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 		cmd_path = find_cmd_path(cmd_node->command->argument[0], shell->env_list);
 		if(!cmd_path)
 		{
+			write(2, "minishell : command not found\n", 30);
 			shell->last_exit_status = 127;
       		return (shell->last_exit_status);
-		} 
+		}
 		pid = fork();
 		if(pid < 0)
 		{
@@ -193,6 +197,7 @@ int execute_command(t_ast_node *ast, t_shell *shell)
 			free(cmd_path);
 		}
 	}
+	
 	return (shell->last_exit_status);
 }
 
@@ -284,6 +289,11 @@ int handle_single_redir(t_redir *r, t_shell *shell)
     close(fd);
     return (1);
 }
+
+//----------------pipe----------------------------
+
+
+
 
 
 
@@ -422,20 +432,82 @@ int	execute_pipe(t_ast_node *ast, t_shell *shell)
 ||: only execute right side if left failed (exit code != 0)
 */
 
-/*bool execute_and(t_ast_node *ast, t_shell *shell)
+bool execute_and(t_ast_node *ast, t_shell *shell)
 {
-	
+	if (!ast || !shell)
+		return (false);
+
+	if (ast->left)
+	{
+		if (ast->left->command)
+			execute_command(ast->left, shell);
+		else
+			execute_pipe(ast->left, shell);
+	}
+	if (shell->last_exit_status == 0 && ast->right)
+	{
+		if (ast->right->command)
+			execute_command(ast->right, shell);
+		else
+			execute_pipe(ast->right, shell);
+	}
+	return (true);
 }
 
-bool ecute_or(t_ast_node *ast, t_shell *shel)
+bool execute_or(t_ast_node *ast, t_shell *shell)
 {
-	
+	if (!ast || !shell)
+		return (false);
+
+	if (ast->left)
+	{
+		if (ast->left->command)
+			execute_command(ast->left, shell);
+		else
+			execute_pipe(ast->left, shell);
+	}
+	if (shell->last_exit_status != 0 && ast->right)
+	{
+		if (ast->right->command)
+			execute_command(ast->right, shell);
+		else
+			execute_pipe(ast->right, shell);
+	}
+	return (true);
 }
 
 bool execute_subshell(t_ast_node *ast, t_shell *shell)
 {
-	
-}*/
+	pid_t pid;
+	int status = 0;
+
+	if (!ast || !shell)
+		return (false);
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("minishell: fork");
+		return (false);
+	}
+	if (pid == 0)
+	{
+		if (ast->left)
+		{
+			//Do I not call execute_ast here ? 
+			if (ast->left->command)
+				execute_command(ast->left, shell);
+			else
+				execute_pipe(ast->left, shell);
+		}
+		exit(shell->last_exit_status);
+	}
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		shell->last_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		shell->last_exit_status = 128 + WTERMSIG(status);
+	return (true);
+}
 
 
 

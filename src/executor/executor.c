@@ -6,7 +6,7 @@
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:02:23 by miyolchy          #+#    #+#             */
-/*   Updated: 2025/12/01 22:11:06 by madlen           ###   ########.fr       */
+/*   Updated: 2025/12/03 17:37:25 by madlen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ bool execute_ast(t_ast_node *ast, t_shell *shell)
 	{
 		return(execute_command(ast, shell));
 	}
-	/*if(ast->value)
+	if(ast->value)
 	{
 		if(ast->value->ctrl_op_type == CTRL_OP_PIPE)
 			return (execute_pipe(ast, shell));
@@ -67,6 +67,6 @@ bool execute_ast(t_ast_node *ast, t_shell *shell)
 			return (execute_or(ast, shell));
 		else if(ast->value->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
 			return (execute_subshell(ast, shell));
-	}*/
+	}
 	return (false);
 }
