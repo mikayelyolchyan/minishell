@@ -101,9 +101,12 @@ t_ast_node	*ast_subshell(t_list **current_token)
 			return (NULL);
 		*current_token = (*current_token)->next;
 		new_node->left = ast_logical(current_token);
-		if (*current_token &&
-			((t_token *)(*current_token)->content)->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
-			*current_token = (*current_token)->next;
+		if (*current_token)
+		{
+			if (((t_token *)(*current_token)->content)->ctrl_op_type
+				== CTRL_OP_SUBSHELL_CLOSE)
+				*current_token = (*current_token)->next;
+		}
 		return (new_node);
 	}
 	return (NULL);

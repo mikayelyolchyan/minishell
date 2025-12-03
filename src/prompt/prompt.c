@@ -10,123 +10,79 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-	Модуль prompt отвечает за формирование и отображение приглашения (prompt)
-		для пользователя в интерактивном режиме работы minishell.
-
-	Задачи:
-	- Формировать строку приглашения, отображающую, например, имя пользователя,
-		текущую директорию, статус последней команды
-		и другие элементы (по желанию).
-	- Выводить prompt и ожидать ввода команды от пользователя.
-	- Использовать библиотеку readline для удобного ввода,
-		поддержки истории и редактирования командной строки.
-	- Обеспечивать корректную работу с сигналами
-		(например, обновлять prompt при Ctrl+C).
-
-	Особенности:
-	- Модуль должен быть изолирован и предоставлять функции для вывода prompt
-		и получения строки ввода.
-	- Должен корректно работать как в интерактивном,
-		так и неинтерактивном режимах.
-*/
-
 #include "../../include/prompt/prompt.h"
 #include "../../include/lexer/lexer.h"
 #include "../../include/parser/parser.h"
 #include "../../include/executor/executor.h"
 #include "../../include/signals/signals.h"
+#include <unistd.h>
 
-/*void		print_tokens(t_list *tokens);
-
-void	get_prompt_line(char *enviornment)
+static char	*read_line_from_stdin(void)
 {
-	char		*line;
-	t_list		*tokens;
+	char	buffer[1024];
+	ssize_t	i;
+	ssize_t	bytes_read;
+	char	*line;
 
-	while (1)
+	i = 0;
+	while (i < (ssize_t)(sizeof(buffer) - 1))
 	{
-		line = readline("minishell$ ");
-		if (!line)
+		bytes_read = read(STDIN_FILENO, &buffer[i], 1);
+		if (bytes_read <= 0)
 			break ;
-		if (line[0] != '\0')
-			add_history(line);
-		tokens = lexical_analyze(line);
-		if (tokens == NULL)
-		{void		print_tokens(t_list *tokens);
+		if (buffer[i] == '\n')
+			break ;
+		i++;
+	}
+	if (i == 0 && bytes_read <= 0)
+		return (NULL);
+	buffer[i] = '\0';
+	line = ft_strdup(buffer);
+	return (line);
+}
 
-void	get_prompt_line(void)
+static void	handle_sigint(t_shell *shell)
 {
-	char		*line;
-	t_list		*tokens;
-
-	while (1)
+	if (g_signal == SIGINT)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		if (line[0] != '\0')
-			add_history(line);
-		tokens = lexical_analyze(line);
-		if (tokens == NULL)
-		{
-			continue ;
-		}
-		else if (tokens != NULL)
-		{
-			parsing(tokens);
-			print_tokens(tokens);
-		}
-		ft_lstclear(&tokens, del_token);
-		free(line);
+		shell->last_exit_status = 130;
+		g_signal = 0;
 	}
 }
-			continue ;
-		}
-		else if (tokens != NULL)
-		{
-			parsing(tokens);
-			print_tokens(tokens);
-		}
-		ft_lstclear(&tokens, del_token);
-		free(line);
-	}
-}*/
 
-void		print_tokens(t_list *tokens);
+static bool	process_input(char *line, t_shell *shell)
+{
+	t_list	*tokens;
+
+	if (line[0] != '\0')
+		add_history(line);
+	tokens = lexical_analyze(line);
+	if (tokens == NULL)
+		return (false);
+	parsing(tokens, shell);
+	ft_lstclear(&tokens, del_token);
+	return (true);
+}
 
 void	get_prompt_line(t_shell *shell)
 {
-	char		*line;
-	t_list		*tokens;
+	char	*line;
 
 	(void)shell;
 	while (1)
 	{
-		line = readline("minishell$ ");
+		if (isatty(STDIN_FILENO))
+			line = readline("minishell$ ");
+		else
+			line = read_line_from_stdin();
 		if (!line)
 		{
-			write(1, "exit\n", 5);
+			if (isatty(STDIN_FILENO))
+				write(1, "exit\n", 5);
 			break ;
 		}
-		if (g_signal == SIGINT)
-		{
-			shell->last_exit_status = 130;
-			g_signal = 0;
-		}
-		if (line[0] != '\0')
-			add_history(line);
-		tokens = lexical_analyze(line);
-		if (tokens == NULL)
-		{
-			free(line);
-			continue ;
-		}
-		else if (tokens != NULL)
-		{
-			parsing(tokens, shell);
-		}
-		ft_lstclear(&tokens, del_token);
+		handle_sigint(shell);
+		process_input(line, shell);
 		free(line);
 	}
 }

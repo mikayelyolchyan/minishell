@@ -14,43 +14,57 @@ EXPANSION_DIR = src/expansion/
 SIGNALS_DIR = src/signals/
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
-BIN_DIR = bin
+BIN_DIR = 
 BUILD_DIR = build
 
 # Основные исходники (для minishell)
 SRCS = \
-    src/main.c \
-    $(PROMPT_DIR)prompt.c \
-    $(LEXER_DIR)tokenizer.c \
-    $(LEXER_DIR)token_set.c \
-    $(LEXER_DIR)token_free.c \
-    $(LEXER_DIR)utils.c \
-    $(PARSER_DIR)parsing.c \
-    $(PARSER_DIR)syntax_analyze.c \
-    $(PARSER_DIR)syntax_analyze_utils.c\
-	$(PARSER_DIR)ast.c\
-    $(PARSER_DIR)ast_2.c\
-	$(PARSER_DIR)ast_command_helper.c\
-	$(PARSER_DIR)ast_free.c\
-	$(PARSER_DIR)ast_redir.c\
-	$(PARSER_DIR)print_ast.c\
-	$(PARSER_DIR)heredoc.c\
-	$(EXECUTOR_DIR)executor.c\
-	$(EXECUTOR_DIR)ast_interpretor.c\
-	$(BUILTINS_DIR)builtins.c\
-	$(BUILTINS_DIR)echo.c\
-	$(BUILTINS_DIR)pwd.c\
-	$(BUILTINS_DIR)cd.c\
-	$(BUILTINS_DIR)env_builtin.c\
-	$(BUILTINS_DIR)exit.c\
-	$(BUILTINS_DIR)export.c\
-	$(BUILTINS_DIR)export_utils.c\
-	$(BUILTINS_DIR)export_print.c\
-	$(BUILTINS_DIR)unset.c\
-	$(EXPANSION_DIR)expansion.c\
-	$(EXPANSION_DIR)expansion_utils.c\
-	$(SIGNALS_DIR)signals.c\
-    tests/lexer/print_tokens.c \
+	src/main.c \
+	$(PROMPT_DIR)prompt.c \
+	$(LEXER_DIR)tokenizer.c \
+	$(LEXER_DIR)token_set.c \
+	$(LEXER_DIR)token_free.c \
+	$(LEXER_DIR)token_utils.c \
+	$(LEXER_DIR)utils.c \
+	$(PARSER_DIR)parsing.c \
+	$(PARSER_DIR)syntax_analyze.c \
+	$(PARSER_DIR)syntax_analyze_utils.c \
+	$(PARSER_DIR)syntax_checks.c \
+	$(PARSER_DIR)syntax_quotes.c \
+	$(PARSER_DIR)ast.c \
+	$(PARSER_DIR)ast_logical.c \
+	$(PARSER_DIR)ast_command_helper.c \
+	$(PARSER_DIR)ast_free.c \
+	$(PARSER_DIR)ast_redir.c \
+	$(PARSER_DIR)print_ast.c \
+	$(PARSER_DIR)heredoc.c \
+	$(PARSER_DIR)heredoc_utils.c \
+	$(PARSER_DIR)heredoc_io.c \
+	$(EXECUTOR_DIR)executor.c \
+	$(EXECUTOR_DIR)ast_interpretor.c \
+	$(EXECUTOR_DIR)command_utils.c \
+	$(EXECUTOR_DIR)redir_utils.c \
+	$(EXECUTOR_DIR)logical_ops.c \
+	$(EXECUTOR_DIR)pipe_utils.c \
+	$(EXECUTOR_DIR)path_utils.c \
+	$(EXECUTOR_DIR)path_checks.c \
+	$(BUILTINS_DIR)builtins.c \
+	$(BUILTINS_DIR)echo.c \
+	$(BUILTINS_DIR)pwd.c \
+	$(BUILTINS_DIR)cd.c \
+	$(BUILTINS_DIR)env_builtin.c \
+	$(BUILTINS_DIR)exit.c \
+	$(BUILTINS_DIR)export.c \
+	$(BUILTINS_DIR)export_utils.c \
+	$(BUILTINS_DIR)export_print.c \
+	$(BUILTINS_DIR)unset.c \
+	$(EXPANSION_DIR)expansion.c \
+	$(EXPANSION_DIR)expansion_utils.c \
+	$(EXPANSION_DIR)expansion_helpers.c \
+	$(SIGNALS_DIR)signals.c \
+	src/env/env.c \
+	src/env/env_utils.c \
+	tests/lexer/print_tokens.c
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 

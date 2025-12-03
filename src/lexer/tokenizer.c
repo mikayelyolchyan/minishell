@@ -1,4 +1,4 @@
- /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
@@ -10,27 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-	Модуль lexer отвечает за низкоуровневую токенизацию строки,
-		введённой пользователем.
-	
-	Задачи:
-	- Разделение строки на токены: слова, операторы (|, <, >, >>, <<),
-		кавычки, переменные окружения.
-	- Учёт экранирования, вложенных кавычек, спецсимволов.
-	- Передача списка токенов парсеру для дальнейшей обработки.
-	
-	Особенности:
-	- Lexer должен быть максимально простым и быстрым,
-		не анализируя структуру команд, а только выделяя токены.
-	- Должен корректно обрабатывать все допустимые символы и конструкции,
-		поддерживаемые minishell.
-*/
-
 #include "../../include/lexer/lexer.h"
 #include "../../include/lexer/utils.h"
-#include <stddef.h>
-#include <stdio.h>
 
 static t_token	*create_token(const char *line, size_t *index)
 {
@@ -56,10 +37,10 @@ static t_token	*create_token(const char *line, size_t *index)
 
 t_list	*lexical_analyze(const char *line)
 {
-	size_t		index;
-	t_list		*head;
-	t_list		*current;
-	t_token		*new_token;	
+	size_t	index;
+	t_list	*head;
+	t_list	*current;
+	t_token	*new_token;
 
 	if (!line)
 		return (NULL);
@@ -76,7 +57,8 @@ t_list	*lexical_analyze(const char *line)
 			return (ft_lstclear(&head, del_token), NULL);
 		current = ft_lstnew(new_token);
 		if (current == NULL)
-			return (del_token(new_token), ft_lstclear(&head, del_token), NULL);
+			return (del_token(new_token),
+				ft_lstclear(&head, del_token), NULL);
 		ft_lstadd_back(&head, current);
 	}
 	return (head);

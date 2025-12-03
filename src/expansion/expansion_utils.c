@@ -31,10 +31,40 @@ char	*join_and_free(char *s1, char *s2)
 	return (result);
 }
 
+static char	*remove_quotes_from_string(char *str)
+{
+	char	*result;
+	int		i;
+	int		j;
+	char	quote;
+
+	result = malloc(ft_strlen(str) + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"') && !quote)
+			quote = str[i++];
+		else if (str[i] == quote)
+		{
+			quote = 0;
+			i++;
+		}
+		else
+			result[j++] = str[i++];
+	}
+	result[j] = '\0';
+	return (result);
+}
+
 static void	expand_arguments(char **args, t_shell *shell)
 {
 	int		i;
 	char	*expanded;
+	char	*no_quotes;
 
 	if (!args)
 		return ;
@@ -44,8 +74,10 @@ static void	expand_arguments(char **args, t_shell *shell)
 		expanded = expand_variables(args[i], shell);
 		if (expanded)
 		{
+			no_quotes = remove_quotes_from_string(expanded);
 			free(args[i]);
-			args[i] = expanded;
+			free(expanded);
+			args[i] = no_quotes;
 		}
 		i++;
 	}
@@ -54,6 +86,7 @@ static void	expand_arguments(char **args, t_shell *shell)
 static void	expand_redirections(t_redir *redir, t_shell *shell)
 {
 	char	*expanded;
+	char	*no_quotes;
 
 	while (redir)
 	{
@@ -62,8 +95,10 @@ static void	expand_redirections(t_redir *redir, t_shell *shell)
 			expanded = expand_variables(redir->filename, shell);
 			if (expanded)
 			{
+				no_quotes = remove_quotes_from_string(expanded);
 				free(redir->filename);
-				redir->filename = expanded;
+				free(expanded);
+				redir->filename = no_quotes;
 			}
 		}
 		redir = redir->next;

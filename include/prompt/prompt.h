@@ -17,7 +17,8 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include  "../executor/executor.h"
+# include "../env/env.h"
+
 void	get_prompt_line(t_shell *shell);
 
 #endif

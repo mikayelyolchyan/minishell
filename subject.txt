@@ -103,3 +103,14 @@ memory leaks
 You should limit yourself to the subject description. Anything that
 is not asked is not required.
 If you have any doubt about a requirement, take bash as a reference.
+
+Chapter V
+Bonus part
+Your program must implement:
+• && and || with parenthesis for priorities.
+• Wildcards * should work for the current working directory.
+The bonus part will only be evaluated if the mandatory part is
+completed perfectly. Perfect means the mandatory part is fully
+implemented and functions without any issues. If you have not passed
+ALL the mandatory requirements, your bonus part will not be evaluated
+at all.

@@ -10,28 +10,59 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-	Модуль env отвечает за работу с переменными окружения в minishell.
-	
-	Переменные окружения — это пары ключ-значение, которые используются
-		для хранения информации, необходимой программам и
-		самой оболочке (например, PATH, HOME, USER и др.).
-	
-	Задачи модуля:
-	- Хранение копии переменных окружения, переданных при запуске minishell
-		(обычно в виде массива строк или собственной структуры).
-	- Поиск, добавление, изменение и удаление переменных окружения
-		(реализация команд export, unset).
-	- Вывод всех переменных окружения (реализация команды env).
-	- Подстановка значений переменных окружения в командной строке
-		(например, $HOME, $PATH, $?).
-	- Корректная обработка специальных переменных ($?, $0 и др.).
-	
-	Особенности:
-	- Все изменения должны отражаться только в копии окружения minishell,
-		не затрагивая глобальное окружение системы.
-	- Модуль должен быть изолирован и предоставлять функции для работы с
-		переменными другим частям программы (parser, executor, builtins).
-	- Необходимо следить за отсутствием утечек памяти при изменении окружения.
-*/
+#include "../../include/env/env.h"
+#include "../../lib/libft/libft.h"
 
+void	init_shell(t_shell *shell, t_env *env_list)
+{
+	shell->env_list = env_list;
+	shell->env_array = NULL;
+	shell->last_exit_status = 0;
+	shell->should_exit = 0;
+}
+
+t_env	*init_node_env(char *name, char *value)
+{
+	t_env	*new_nod;
+
+	new_nod = malloc(sizeof(t_env));
+	if (!new_nod)
+		return (NULL);
+	new_nod->name = name;
+	new_nod->value = value;
+	new_nod->next = NULL;
+	return (new_nod);
+}
+
+void	append_node_env(t_env **list, t_env *new_node)
+{
+	t_env	*cur;
+
+	if (!*list)
+	{
+		*list = new_node;
+		return ;
+	}
+	cur = *list;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = new_node;
+}
+
+t_env	*get_env_list(char **envp)
+{
+	int		i;
+	char	*name;
+	char	*value;
+	t_env	*list;
+
+	i = 0;
+	list = NULL;
+	while (envp[i])
+	{
+		split_env_entry(envp[i], &name, &value);
+		append_node_env(&list, init_node_env(name, value));
+		i++;
+	}
+	return (list);
+}

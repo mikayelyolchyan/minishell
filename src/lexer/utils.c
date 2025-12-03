@@ -14,8 +14,8 @@
 
 bool	is_space(int c)
 {
-	return (c == '\f' || c == '\n' || c == '\r' || \
-			c == '\t' || c == '\v' || c == ' ');
+	return (c == '\f' || c == '\n' || c == '\r'
+		|| c == '\t' || c == '\v' || c == ' ');
 }
 
 bool	is_operator(int c)

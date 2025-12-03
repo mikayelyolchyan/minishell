@@ -48,7 +48,7 @@ static int	get_var_name_len(char *str)
 	return (len);
 }
 
-static char	*expand_dollar(char *str, int *i, t_shell *shell, int in_quote)
+char	*expand_dollar(char *str, int *i, t_shell *shell, int in_quote)
 {
 	char	*var_name;
 	char	*var_value;
@@ -62,7 +62,11 @@ static char	*expand_dollar(char *str, int *i, t_shell *shell, int in_quote)
 	(*i)++;
 	name_len = get_var_name_len(&str[*i]);
 	if (name_len == 0)
+	{
+		if (str[*i] && (str[*i] == '"' || str[*i] == '\'') && in_quote == 0)
+			return (ft_strdup(""));
 		return (ft_strdup("$"));
+	}
 	var_name = ft_substr(str, *i, name_len);
 	if (!var_name)
 		return (NULL);
@@ -105,13 +109,7 @@ char	*expand_variables(char *str, t_shell *shell)
 	while (str[i])
 	{
 		handle_quotes(str[i], &in_quote);
-		if (str[i] == '$' && in_quote != 1 && str[i + 1])
-			temp = expand_dollar(str, &i, shell, in_quote);
-		else
-		{
-			temp = ft_substr(str, i, 1);
-			i++;
-		}
+		temp = process_expansion(str, &i, shell, in_quote);
 		result = join_and_free(result, temp);
 	}
 	return (result);

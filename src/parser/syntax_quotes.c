@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_ast.c                                        :+:      :+:    :+:   */
+/*   syntax_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madlen <madlen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,13 +12,40 @@
 
 #include "../../include/parser/parser.h"
 
-void	print_ast_recursive(t_ast_node *node, int depth)
+static bool	check_quote_char(char c, char *open_quote, int *is_open)
 {
-	(void)node;
-	(void)depth;
+	if ((c == '"' || c == '\'') && *is_open == 0)
+	{
+		*open_quote = c;
+		*is_open = 1;
+		return (true);
+	}
+	if ((c == '"' || c == '\'') && *is_open == 1 && c == *open_quote)
+	{
+		*is_open = 0;
+		return (true);
+	}
+	return (false);
 }
 
-void	print_ast(t_ast_node *ast)
+bool	chek_closed_quotes(t_list *tokens)
 {
-	(void)ast;
+	int		i;
+	char	*current_data;
+	t_token	*current_token;
+	char	open_quote;
+	int		is_open;
+
+	current_token = (t_token *)tokens->content;
+	current_data = (char *)current_token->value;
+	is_open = 0;
+	i = 0;
+	while (current_data[i])
+	{
+		check_quote_char(current_data[i], &open_quote, &is_open);
+		i++;
+	}
+	if (is_open != 0)
+		return (false);
+	return (true);
 }

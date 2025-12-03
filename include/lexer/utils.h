@@ -14,9 +14,15 @@
 # define UTILS_H
 
 # include <stdbool.h>
+# include <stddef.h>
+# include "lexer.h"
 
 bool	is_space(int c);
 bool	is_operator(int c);
 bool	is_redirection(int c);
+bool	handle_quoted_char(const char *line, size_t i, char *quote);
+size_t	get_word_end(const char *line, size_t i);
+void	determine_ctrl_op_type(t_token *new_token, const char *line,
+			size_t index);
 
 #endif

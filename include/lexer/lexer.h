@@ -33,7 +33,7 @@ typedef enum e_control_operator_type
 	CTRL_OP_SUBSHELL_OPEN,
 	CTRL_OP_SUBSHELL_CLOSE,
 	CTRL_OP_END,
-	CTRL_OP_BACKGROUND 
+	CTRL_OP_BACKGROUND
 }	t_control_operator_type;
 
 typedef enum e_redirection_operator_type
@@ -51,17 +51,14 @@ typedef struct s_token
 	char							*value;
 	t_control_operator_type			ctrl_op_type;
 	t_redirection_operator_type		redir_op_type;
-
 }	t_token;
 
-t_list		*lexical_analyze(const char *line);
-
-void		del_token(void *content);
-
-void		set_control_operator(t_token *new_token, const char *line, \
-									size_t *index);
-void		set_redirection_operator(t_token *new_token, const char *line, \
-										size_t *index);
-bool		set_word(t_token *new_token, const char *line, size_t *index);
+t_list	*lexical_analyze(const char *line);
+void	del_token(void *content);
+void	set_control_operator(t_token *new_token, const char *line,
+			size_t *index);
+void	set_redirection_operator(t_token *new_token, const char *line,
+			size_t *index);
+bool	set_word(t_token *new_token, const char *line, size_t *index);
 
 #endif
