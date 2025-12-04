@@ -388,7 +388,7 @@ t_ast_node *ast_command(t_list **current_token)
 			if (!tmp)
 				break;
 			args = tmp;
-			args[argc] = strdup(token->value); // copy string
+				args[argc] = ft_strdup(token->value);
 			args[argc + 1] = NULL;
 			argc++;
 			*current_token = (*current_token)->next;
@@ -406,7 +406,7 @@ t_ast_node *ast_command(t_list **current_token)
 			token = (t_token *)(*current_token)->content;
 			if (token->token_type != TYPE_WORD)
 				break;
-			new_redir->filename = strdup(token->value);
+				new_redir->filename = ft_strdup(token->value);
 			new_redir->next = NULL;
 
 			if (!redir_head)

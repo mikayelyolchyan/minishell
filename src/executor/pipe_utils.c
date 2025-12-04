@@ -21,10 +21,8 @@ static void	execute_left_pipe(t_ast_node *ast, t_shell *shell, int *pipefd)
 		exit(1);
 	}
 	close(pipefd[1]);
-	if (ast->left->command)
-		exit(execute_command(ast->left, shell));
-	else
-		exit(execute_pipe(ast->left, shell));
+	execute_ast(ast->left, shell);
+	exit(shell->last_exit_status);
 }
 
 static void	execute_right_pipe(t_ast_node *ast, t_shell *shell, int *pipefd)
@@ -36,10 +34,8 @@ static void	execute_right_pipe(t_ast_node *ast, t_shell *shell, int *pipefd)
 		exit(1);
 	}
 	close(pipefd[0]);
-	if (ast->right->command)
-		exit(execute_command(ast->right, shell));
-	else
-		exit(execute_pipe(ast->right, shell));
+	execute_ast(ast->right, shell);
+	exit(shell->last_exit_status);
 }
 
 static int	wait_for_children(pid_t pid_left, pid_t pid_right, t_shell *shell)

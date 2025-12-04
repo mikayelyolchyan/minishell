@@ -79,7 +79,8 @@ int	handle_single_redir(t_redir *r, t_shell *shell)
 		filename = r->filename;
 	if (!filename)
 	{
-		fprintf(stderr, "minishell: error: redirection filename is NULL\n");
+		ft_putendl_fd("minishell: error: redirection filename is NULL",
+			STDERR_FILENO);
 		shell->last_exit_status = 1;
 		return (0);
 	}

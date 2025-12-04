@@ -34,7 +34,8 @@ int	builtin_exit(char **args, t_shell *shell)
 {
 	int	exit_code;
 
-	ft_putendl_fd("exit", STDOUT_FILENO);
+	if (!shell->in_subshell)
+		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args[1])
 		exit(shell->last_exit_status);
 	if (!is_numeric(args[1]))

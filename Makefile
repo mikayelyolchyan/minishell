@@ -46,6 +46,7 @@ SRCS = \
 	$(EXECUTOR_DIR)redir_utils.c \
 	$(EXECUTOR_DIR)builtin_redir.c \
 	$(EXECUTOR_DIR)logical_ops.c \
+	$(EXECUTOR_DIR)subshell.c \
 	$(EXECUTOR_DIR)pipe_utils.c \
 	$(EXECUTOR_DIR)path_utils.c \
 	$(EXECUTOR_DIR)path_checks.c \

@@ -65,6 +65,8 @@ bool	check_subshell_syntax(t_list *current_token)
 	t_token	*next;
 
 	current = (t_token *)current_token->content;
+	if (!current_token->next)
+		return (print_syntax_error("newline"), false);
 	next = (t_token *)current_token->next->content;
 	if (current->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
 	{
@@ -78,6 +80,8 @@ bool	check_subshell_syntax(t_list *current_token)
 	else if (current->ctrl_op_type == CTRL_OP_SUBSHELL_CLOSE)
 	{
 		if (next && next->token_type == TYPE_WORD)
+			return (print_syntax_error(next->value), false);
+		if (next && next->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
 			return (print_syntax_error(next->value), false);
 	}
 	return (true);

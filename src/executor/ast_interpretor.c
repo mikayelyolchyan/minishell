@@ -13,6 +13,7 @@
 #include "../../include/executor/executor.h"
 #include "../../include/builtins/builtins.h"
 #include "../../include/signals/signals.h"
+#include "../../include/expansion/expansion.h"
 
 bool	is_bulit_in_cmd(t_ast_node *cmd_node)
 {
@@ -101,6 +102,11 @@ int	execute_command(t_ast_node *ast, t_shell *shell)
 	cmd_node = ast;
 	if (!cmd_node || !cmd_node->command)
 		return (1);
+	if (cmd_node->command)
+	{
+		expand_arguments(cmd_node->command->argument, shell);
+		expand_redirections(cmd_node->command->redir, shell);
+	}
 	if (!cmd_node->command->argument || !cmd_node->command->argument[0]
 		|| !cmd_node->command->argument[0][0])
 		return (execute_empty_cmd(cmd_node, shell));

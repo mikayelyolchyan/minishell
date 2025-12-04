@@ -29,6 +29,7 @@ typedef struct s_shell
 	char	**env_array;
 	int		last_exit_status;
 	int		should_exit;
+	int		in_subshell;
 }	t_shell;
 
 void	init_shell(t_shell *shell, t_env *env_list);

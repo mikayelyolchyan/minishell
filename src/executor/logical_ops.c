@@ -12,24 +12,41 @@
 
 #include "../../include/executor/executor.h"
 
+static void	execute_node_logical(t_ast_node *node, t_shell *shell)
+{
+	if (node->value && node->value->ctrl_op_type == CTRL_OP_AND)
+		execute_and(node, shell);
+	else if (node->value && node->value->ctrl_op_type == CTRL_OP_OR)
+		execute_or(node, shell);
+	else if (node->value
+		&& node->value->ctrl_op_type == CTRL_OP_SUBSHELL_OPEN)
+		execute_subshell(node, shell);
+	else if (node->command)
+		execute_command(node, shell);
+	else
+		execute_pipe(node, shell);
+}
+
+static void	execute_and_left(t_ast_node *ast, t_shell *shell)
+{
+	if (!ast->left)
+		return ;
+	execute_node_logical(ast->left, shell);
+}
+
+static void	execute_and_right(t_ast_node *ast, t_shell *shell)
+{
+	if (shell->last_exit_status != 0 || !ast->right)
+		return ;
+	execute_node_logical(ast->right, shell);
+}
+
 bool	execute_and(t_ast_node *ast, t_shell *shell)
 {
 	if (!ast || !shell)
 		return (false);
-	if (ast->left)
-	{
-		if (ast->left->command)
-			execute_command(ast->left, shell);
-		else
-			execute_pipe(ast->left, shell);
-	}
-	if (shell->last_exit_status == 0 && ast->right)
-	{
-		if (ast->right->command)
-			execute_command(ast->right, shell);
-		else
-			execute_pipe(ast->right, shell);
-	}
+	execute_and_left(ast, shell);
+	execute_and_right(ast, shell);
 	return (true);
 }
 
@@ -38,51 +55,8 @@ bool	execute_or(t_ast_node *ast, t_shell *shell)
 	if (!ast || !shell)
 		return (false);
 	if (ast->left)
-	{
-		if (ast->left->command)
-			execute_command(ast->left, shell);
-		else
-			execute_pipe(ast->left, shell);
-	}
+		execute_node_logical(ast->left, shell);
 	if (shell->last_exit_status != 0 && ast->right)
-	{
-		if (ast->right->command)
-			execute_command(ast->right, shell);
-		else
-			execute_pipe(ast->right, shell);
-	}
-	return (true);
-}
-
-static void	execute_subshell_child(t_ast_node *ast, t_shell *shell)
-{
-	if (ast->left)
-	{
-		if (ast->left->command)
-			execute_command(ast->left, shell);
-		else
-			execute_pipe(ast->left, shell);
-	}
-	exit(shell->last_exit_status);
-}
-
-bool	execute_subshell(t_ast_node *ast, t_shell *shell)
-{
-	pid_t	pid;
-	int		status;
-
-	if (!ast || !shell)
-		return (false);
-	status = 0;
-	pid = fork();
-	if (pid < 0)
-		return (perror("minishell: fork"), false);
-	if (pid == 0)
-		execute_subshell_child(ast, shell);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		shell->last_exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		shell->last_exit_status = 128 + WTERMSIG(status);
+		execute_node_logical(ast->right, shell);
 	return (true);
 }

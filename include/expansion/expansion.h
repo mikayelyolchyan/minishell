@@ -20,6 +20,8 @@
 
 char	*expand_variables(char *str, t_shell *shell);
 void	expand_ast_node(t_ast_node *node, t_shell *shell);
+void	expand_arguments(char **args, t_shell *shell);
+void	expand_redirections(t_redir *redir, t_shell *shell);
 char	*join_and_free(char *s1, char *s2);
 char	*expand_tilde(t_shell *shell);
 int		should_expand_tilde(char *str, int i, int in_quote);

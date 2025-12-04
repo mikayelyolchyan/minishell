@@ -60,7 +60,7 @@ static char	*remove_quotes_from_string(char *str)
 	return (result);
 }
 
-static void	expand_arguments(char **args, t_shell *shell)
+void	expand_arguments(char **args, t_shell *shell)
 {
 	int		i;
 	char	*expanded;
@@ -83,7 +83,7 @@ static void	expand_arguments(char **args, t_shell *shell)
 	}
 }
 
-static void	expand_redirections(t_redir *redir, t_shell *shell)
+void	expand_redirections(t_redir *redir, t_shell *shell)
 {
 	char	*expanded;
 	char	*no_quotes;

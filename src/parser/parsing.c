@@ -49,7 +49,6 @@ bool	parsing(t_list *tokens, t_shell *shell)
 		return (handle_parse_error(NULL, "AST build failed\n"));
 	if (!process_heredocs(ast, shell))
 		return (false);
-	expand_ast_node(ast, shell);
 	execute_ast(ast, shell);
 	free_ast(ast);
 	return (true);
