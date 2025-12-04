@@ -30,5 +30,6 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&shell, env_list);
 	setup_signals_interactive();
 	get_prompt_line(&shell);
+	free_env_list(shell.env_list);
 	return (shell.last_exit_status);
 }

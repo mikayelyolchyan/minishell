@@ -38,5 +38,6 @@ char	*dup_substr(const char *src, int len);
 void	split_env_entry(char *entry, char **name, char **value);
 t_env	*get_env_list(char **envp);
 void	print_env_list(t_env *list);
+void	free_env_list(t_env *list);
 
 #endif

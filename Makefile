@@ -14,7 +14,7 @@ EXPANSION_DIR = src/expansion/
 SIGNALS_DIR = src/signals/
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
-BIN_DIR = 
+BIN_DIR = ./
 BUILD_DIR = build
 
 # Основные исходники (для minishell)
@@ -44,6 +44,7 @@ SRCS = \
 	$(EXECUTOR_DIR)ast_interpretor.c \
 	$(EXECUTOR_DIR)command_utils.c \
 	$(EXECUTOR_DIR)redir_utils.c \
+	$(EXECUTOR_DIR)builtin_redir.c \
 	$(EXECUTOR_DIR)logical_ops.c \
 	$(EXECUTOR_DIR)pipe_utils.c \
 	$(EXECUTOR_DIR)path_utils.c \

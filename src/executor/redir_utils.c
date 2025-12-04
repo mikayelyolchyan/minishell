@@ -12,6 +12,8 @@
 
 #include "../../include/executor/executor.h"
 #include <fcntl.h>
+#include <string.h>
+#include <errno.h>
 
 static int	open_redir_file(t_redir *r, const char *filename)
 {
@@ -54,6 +56,16 @@ static int	dup_redir_fd(t_redir *r, int fd, t_shell *shell)
 	return (1);
 }
 
+static int	handle_redir_error(const char *filename, t_shell *shell)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd((char *)filename, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(strerror(errno), STDERR_FILENO);
+	shell->last_exit_status = 1;
+	return (0);
+}
+
 int	handle_single_redir(t_redir *r, t_shell *shell)
 {
 	int			fd;
@@ -73,11 +85,7 @@ int	handle_single_redir(t_redir *r, t_shell *shell)
 	}
 	fd = open_redir_file(r, filename);
 	if (fd < 0)
-	{
-		perror("minishell");
-		shell->last_exit_status = 1;
-		return (0);
-	}
+		return (handle_redir_error(filename, shell));
 	return (dup_redir_fd(r, fd, shell));
 }
 

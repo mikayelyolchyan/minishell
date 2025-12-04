@@ -35,6 +35,9 @@ void	execute_cmd_child(t_ast_node *cmd_node, char *cmd_path,
 			t_shell *shell);
 int		handle_single_redir(t_redir *r, t_shell *shell);
 int		apply_redir(t_ast_node *cmd_node, t_shell *shell);
+int		execute_builtin_with_redir(t_ast_node *cmd_node, t_shell *shell);
+int		execute_empty_cmd(t_ast_node *cmd_node, t_shell *shell);
+int		execute_builtin_cmd(t_ast_node *cmd_node, t_shell *shell);
 int		execute_pipe(t_ast_node *ast, t_shell *shell);
 bool	execute_and(t_ast_node *ast, t_shell *shell);
 bool	execute_or(t_ast_node *ast, t_shell *shell);

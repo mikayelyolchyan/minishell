@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "../../include/builtins/builtins.h"
+#include <string.h>
+#include <errno.h>
 
 static char	*get_home_dir(t_shell *shell)
 {
@@ -65,7 +67,10 @@ int	builtin_cd(char **args, t_shell *shell)
 		return (0);
 	if (chdir(path) != 0)
 	{
-		perror("minishell: cd");
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 		return (1);
 	}
 	return (0);

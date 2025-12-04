@@ -66,3 +66,21 @@ t_env	*get_env_list(char **envp)
 	}
 	return (list);
 }
+
+void	free_env_list(t_env *list)
+{
+	t_env	*current;
+	t_env	*next;
+
+	current = list;
+	while (current)
+	{
+		next = current->next;
+		if (current->name)
+			free(current->name);
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = next;
+	}
+}

@@ -77,14 +77,16 @@ static int	execute_external_cmd(t_ast_node *cmd_node, t_shell *shell)
 	cmd_path = find_cmd_path(cmd_node->command->argument[0], shell->env_list);
 	if (!cmd_path)
 	{
-		write(2, "minishell : command not found\n", 30);
+		write(2, "minishell: command not found\n", 30);
 		shell->last_exit_status = 127;
 		return (shell->last_exit_status);
 	}
 	pid = fork();
 	if (pid < 0)
-		return (write(STDERR_FILENO, "minishell: fork failed\n", 23),
-			free(cmd_path), 1);
+	{
+		free(cmd_path);
+		return (write(STDERR_FILENO, "minishell: fork failed\n", 23), 1);
+	}
 	if (pid == 0)
 		execute_cmd_child(cmd_node, cmd_path, shell);
 	else
@@ -97,15 +99,12 @@ int	execute_command(t_ast_node *ast, t_shell *shell)
 	t_ast_node	*cmd_node;
 
 	cmd_node = ast;
-	if (!cmd_node)
-		return (1);
-	if (!cmd_node->command)
+	if (!cmd_node || !cmd_node->command)
 		return (1);
 	if (!cmd_node->command->argument || !cmd_node->command->argument[0]
 		|| !cmd_node->command->argument[0][0])
-		return (0);
+		return (execute_empty_cmd(cmd_node, shell));
 	if (is_bulit_in_cmd(cmd_node) == true)
-		return (execute_builtin(cmd_node, shell));
-	else
-		return (execute_external_cmd(cmd_node, shell));
+		return (execute_builtin_cmd(cmd_node, shell));
+	return (execute_external_cmd(cmd_node, shell));
 }

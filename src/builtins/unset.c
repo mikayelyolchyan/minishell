@@ -39,12 +39,7 @@ static int	unset_variable(t_shell *shell, char *name)
 	size_t	name_len;
 
 	if (!is_valid_identifier(name))
-	{
-		ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
-		ft_putstr_fd(name, STDERR_FILENO);
-		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
-		return (1);
-	}
+		return (0);
 	current = shell->env_list;
 	prev = NULL;
 	name_len = ft_strlen(name);
