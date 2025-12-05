@@ -30,6 +30,10 @@ int		execute_command(t_ast_node *ast, t_shell *shell);
 void	execute_command_child(t_ast_node *cmd_node, char *cmd_path,
 			t_shell *shell);
 void	free_arr(char **arr);
+void	shift_empty_args(char **args);
+void	clean_empty_markers(char **args);
+int		handle_empty_command(t_shell *shell);
+int		process_empty_args(t_ast_node *cmd_node, t_shell *shell);
 int		execute_builtin(t_ast_node *node, t_shell *shell);
 void	execute_cmd_child(t_ast_node *cmd_node, char *cmd_path,
 			t_shell *shell);

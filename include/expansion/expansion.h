@@ -23,6 +23,7 @@ void	expand_ast_node(t_ast_node *node, t_shell *shell);
 void	expand_arguments(char **args, t_shell *shell);
 void	expand_redirections(t_redir *redir, t_shell *shell);
 char	*join_and_free(char *s1, char *s2);
+char	*remove_quotes_from_string(char *str);
 char	*expand_tilde(t_shell *shell);
 int		should_expand_tilde(char *str, int i, int in_quote);
 char	*expand_dollar(char *str, int *i, t_shell *shell, int in_quote);

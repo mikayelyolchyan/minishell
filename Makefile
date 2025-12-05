@@ -42,6 +42,7 @@ SRCS = \
 	$(EXECUTOR_DIR)executor.c \
 	$(EXECUTOR_DIR)ast_interpretor.c \
 	$(EXECUTOR_DIR)command_utils.c \
+	$(EXECUTOR_DIR)command_empty.c \
 	$(EXECUTOR_DIR)redir_utils.c \
 	$(EXECUTOR_DIR)builtin_redir.c \
 	$(EXECUTOR_DIR)logical_ops.c \
@@ -62,6 +63,7 @@ SRCS = \
 	$(EXPANSION_DIR)expansion.c \
 	$(EXPANSION_DIR)expansion_utils.c \
 	$(EXPANSION_DIR)expansion_helpers.c \
+	$(EXPANSION_DIR)expansion_quotes.c \
 	$(SIGNALS_DIR)signals.c \
 	src/env/env.c \
 	src/env/env_utils.c

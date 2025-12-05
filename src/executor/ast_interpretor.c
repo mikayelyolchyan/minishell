@@ -78,7 +78,9 @@ static int	execute_external_cmd(t_ast_node *cmd_node, t_shell *shell)
 	cmd_path = find_cmd_path(cmd_node->command->argument[0], shell->env_list);
 	if (!cmd_path)
 	{
-		write(2, "minishell: command not found\n", 30);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_node->command->argument[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		shell->last_exit_status = 127;
 		return (shell->last_exit_status);
 	}
@@ -98,6 +100,7 @@ static int	execute_external_cmd(t_ast_node *cmd_node, t_shell *shell)
 int	execute_command(t_ast_node *ast, t_shell *shell)
 {
 	t_ast_node	*cmd_node;
+	int			result;
 
 	cmd_node = ast;
 	if (!cmd_node || !cmd_node->command)
@@ -107,9 +110,17 @@ int	execute_command(t_ast_node *ast, t_shell *shell)
 		expand_arguments(cmd_node->command->argument, shell);
 		expand_redirections(cmd_node->command->redir, shell);
 	}
-	if (!cmd_node->command->argument || !cmd_node->command->argument[0]
-		|| !cmd_node->command->argument[0][0])
+	if (!cmd_node->command->argument || !cmd_node->command->argument[0])
 		return (execute_empty_cmd(cmd_node, shell));
+	if (cmd_node->command->argument[0][0] == 1)
+		return (handle_empty_command(shell));
+	if (cmd_node->command->argument[0][0] == '\0')
+	{
+		result = process_empty_args(cmd_node, shell);
+		if (result != -1)
+			return (result);
+	}
+	clean_empty_markers(cmd_node->command->argument);
 	if (is_bulit_in_cmd(cmd_node) == true)
 		return (execute_builtin_cmd(cmd_node, shell));
 	return (execute_external_cmd(cmd_node, shell));

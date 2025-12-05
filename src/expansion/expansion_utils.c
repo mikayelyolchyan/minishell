@@ -31,35 +31,6 @@ char	*join_and_free(char *s1, char *s2)
 	return (result);
 }
 
-static char	*remove_quotes_from_string(char *str)
-{
-	char	*result;
-	int		i;
-	int		j;
-	char	quote;
-
-	result = malloc(ft_strlen(str) + 1);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if ((str[i] == '\'' || str[i] == '"') && !quote)
-			quote = str[i++];
-		else if (str[i] == quote)
-		{
-			quote = 0;
-			i++;
-		}
-		else
-			result[j++] = str[i++];
-	}
-	result[j] = '\0';
-	return (result);
-}
-
 void	expand_arguments(char **args, t_shell *shell)
 {
 	int		i;
