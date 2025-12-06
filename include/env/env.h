@@ -43,5 +43,7 @@ void	print_env_list(t_env *list);
 void	free_env_list(t_env *list);
 void	cleanup_shell(t_shell *shell);
 char	**env_list_to_array(t_env *list);
+void	set_env_value(t_env *list, char *name, char *value);
+void	update_env_array(t_shell *shell);
 
 #endif

@@ -69,5 +69,6 @@ int	builtin_unset(char **args, t_shell *shell)
 			ret = 1;
 		i++;
 	}
+	update_env_array(shell);
 	return (ret);
 }

@@ -72,3 +72,17 @@ char	**env_list_to_array(t_env *list)
 	array[i] = NULL;
 	return (array);
 }
+
+void	update_env_array(t_shell *shell)
+{
+	int	i;
+
+	if (shell->env_array)
+	{
+		i = 0;
+		while (shell->env_array[i])
+			free(shell->env_array[i++]);
+		free(shell->env_array);
+	}
+	shell->env_array = env_list_to_array(shell->env_list);
+}
