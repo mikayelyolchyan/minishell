@@ -19,6 +19,7 @@ void	init_shell(t_shell *shell, t_env *env_list)
 	shell->env_array = NULL;
 	shell->last_exit_status = 0;
 	shell->should_exit = 0;
+	shell->current_line = NULL;
 }
 
 t_env	*init_node_env(char *name, char *value)

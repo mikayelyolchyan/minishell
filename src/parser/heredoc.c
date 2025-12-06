@@ -12,6 +12,7 @@
 
 #include "../../include/parser/parser.h"
 #include "../../include/expansion/expansion.h"
+#include "../../include/signals/signals.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -79,7 +80,11 @@ bool	make_heredoc(t_redir *redir, t_shell *shell, int heredoc_index)
 	tmp_fd = open_heredoc_file(tmp_filename);
 	if (tmp_fd < 0)
 		return (free(delimiter), false);
+	if (isatty(STDIN_FILENO))
+		setup_signals_heredoc();
 	read_heredoc_loop(tmp_fd, delimiter);
+	if (isatty(STDIN_FILENO))
+		setup_signals_interactive();
 	close(tmp_fd);
 	free(delimiter);
 	redir->heredoc_tmpfile = tmp_filename;

@@ -66,7 +66,8 @@ SRCS = \
 	$(EXPANSION_DIR)expansion_quotes.c \
 	$(SIGNALS_DIR)signals.c \
 	src/env/env.c \
-	src/env/env_utils.c
+	src/env/env_utils.c \
+	src/env/env_cleanup.c
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 

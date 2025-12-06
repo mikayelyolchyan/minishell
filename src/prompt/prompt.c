@@ -81,8 +81,12 @@ void	get_prompt_line(t_shell *shell)
 				write(1, "exit\n", 5);
 			break ;
 		}
+		shell->current_line = line;
 		handle_sigint(shell);
 		process_input(line, shell);
 		free(line);
+		shell->current_line = NULL;
+		if (shell->should_exit)
+			break ;
 	}
 }

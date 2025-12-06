@@ -6,7 +6,7 @@
 
   <!-- Short Description -->
   <p align="center">
-	  <b>42 Yerevan</b><br>
+	  <b>42 Yerevan Minishell</b><br>
   </p>
 
   <h3>

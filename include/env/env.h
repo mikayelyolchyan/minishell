@@ -30,6 +30,7 @@ typedef struct s_shell
 	int		last_exit_status;
 	int		should_exit;
 	int		in_subshell;
+	char	*current_line;
 }	t_shell;
 
 void	init_shell(t_shell *shell, t_env *env_list);
@@ -40,5 +41,6 @@ void	split_env_entry(char *entry, char **name, char **value);
 t_env	*get_env_list(char **envp);
 void	print_env_list(t_env *list);
 void	free_env_list(t_env *list);
+void	cleanup_shell(t_shell *shell);
 
 #endif

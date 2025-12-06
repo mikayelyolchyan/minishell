@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+
+spawn ./binminishell
+expect "minishell$ "
+send "<<a\r"
+expect "> "
+send "a\r"
+expect {
+    "minishell$ " {
+        send "echo SUCCESS\r"
+        expect "SUCCESS"
+        send "exit\r"
+        puts "\n\nTEST PASSED: Shell continued after heredoc!"
+        exit 0
+    }
+    timeout {
+        puts "\n\nTEST FAILED: Shell exited after heredoc"
+        exit 1
+    }
+    eof {
+        puts "\n\nTEST FAILED: Shell exited after heredoc (EOF)"
+        exit 1
+    }
+}
