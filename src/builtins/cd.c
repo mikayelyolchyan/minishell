@@ -91,10 +91,12 @@ int	builtin_cd(char **args, t_shell *shell)
 	char	old_cwd[4096];
 	char	new_cwd[4096];
 	int		error;
+	int		print_path;
 
 	path = get_target_path(args, shell, &error);
 	if (error || !path || path[0] == '\0')
 		return (error);
+	print_path = (args[1] && args[1][0] == '-' && args[1][1] == '\0');
 	if (getcwd(old_cwd, sizeof(old_cwd)) == NULL)
 		old_cwd[0] = '\0';
 	if (change_directory(path))
@@ -104,7 +106,7 @@ int	builtin_cd(char **args, t_shell *shell)
 	if (getcwd(new_cwd, sizeof(new_cwd)) != NULL)
 		set_env_value(shell->env_list, "PWD", new_cwd);
 	update_env_array(shell);
-	if (args[1] && args[1][0] == '-' && args[1][1] == '\0')
-		ft_putendl_fd(path, STDOUT_FILENO);
+	if (print_path && getcwd(new_cwd, sizeof(new_cwd)) != NULL)
+		ft_putendl_fd(new_cwd, STDOUT_FILENO);
 	return (0);
 }
