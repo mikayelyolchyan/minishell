@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address -fsanitize=undefined
+CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address -fsanitize=undefined
 
 SOURCES_DIR = src/
 LEXER_DIR = src/lexer/
