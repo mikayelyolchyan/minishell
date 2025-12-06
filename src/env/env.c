@@ -16,10 +16,11 @@
 void	init_shell(t_shell *shell, t_env *env_list)
 {
 	shell->env_list = env_list;
-	shell->env_array = NULL;
+	shell->env_array = env_list_to_array(env_list);
 	shell->last_exit_status = 0;
 	shell->should_exit = 0;
 	shell->current_line = NULL;
+	shell->in_subshell = 0;
 }
 
 t_env	*init_node_env(char *name, char *value)

@@ -42,5 +42,6 @@ t_env	*get_env_list(char **envp);
 void	print_env_list(t_env *list);
 void	free_env_list(t_env *list);
 void	cleanup_shell(t_shell *shell);
+char	**env_list_to_array(t_env *list);
 
 #endif

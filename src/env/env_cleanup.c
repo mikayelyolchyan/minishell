@@ -17,10 +17,20 @@
 
 void	cleanup_shell(t_shell *shell)
 {
+	int	i;
+
 	if (shell->env_list)
 	{
 		free_env_list(shell->env_list);
 		shell->env_list = NULL;
+	}
+	if (shell->env_array)
+	{
+		i = 0;
+		while (shell->env_array[i])
+			free(shell->env_array[i++]);
+		free(shell->env_array);
+		shell->env_array = NULL;
 	}
 	if (shell->current_line)
 	{
